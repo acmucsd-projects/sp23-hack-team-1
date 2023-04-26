@@ -34,8 +34,6 @@ mongoose.connect(process.env.DB_URL, {
 */
 
 
-
-
 const server = http.createServer(function (req,res){
 
   //write header
@@ -48,7 +46,7 @@ const server = http.createServer(function (req,res){
 
 //prints a log once the server starts listening
 
-server.listen(port,hostName,function() {console.log(`Server running on http://${hostName}:${port}`)});
+server.listen(port,hostName,function() {console.log(`Server1 running on http://${hostName}:${port}`)});
 
 
 module.exports = app;
