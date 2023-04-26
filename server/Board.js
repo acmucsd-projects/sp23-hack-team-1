@@ -24,6 +24,7 @@ function newBoard(){
 }
 
 
+module.exports = newBoard;
 
 
 

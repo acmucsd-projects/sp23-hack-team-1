@@ -12,6 +12,7 @@ const port = 8000;
 //end server
 
 const usersRouter = require('./routes/users');
+const newBoard = require('./Board');
 
 const app = express();
 
@@ -34,19 +35,20 @@ mongoose.connect(process.env.DB_URL, {
 */
 
 
-const server = http.createServer(function (req,res){
-
-  //write header
-  res.writeHead(200,{"Content-Type": "text/plain"});
-  //send response body
-  res.end("Hello World\n")
-});
-
-
+const server = http.createServer(app);
 
 //prints a log once the server starts listening
 
 server.listen(port,hostName,function() {console.log(`Server1 running on http://${hostName}:${port}`)});
+
+//create and return a new board
+app.get('/api/newboard',
+
+(req,res) => {
+ res.json(newBoard()) 
+}
+
+);
 
 
 module.exports = app;
