@@ -24,10 +24,21 @@ function newBoard(){
 }
 
 
-module.exports = newBoard;
+//changes the current team's turn to pick words
+function endTurn(board,team){
+if (team === "red") {board.team = "blue"}
+else if (team == "blue"){board.team = "red"}
+else {board.team = "Something weird happened, check the request"};
+return board;
+
+}
 
 
+//module.exports = newBoard;
 
+exports.newBoard = newBoard;
+
+exports.endTurn = endTurn;
 
 
 

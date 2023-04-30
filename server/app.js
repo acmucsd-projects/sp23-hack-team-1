@@ -12,7 +12,10 @@ const port = 8000;
 //end server
 
 const usersRouter = require('./routes/users');
-const newBoard = require('./Board');
+const Board = require('./Board');
+
+const newBoard = Board.newBoard;
+const endTurn = Board.endTurn;
 
 const app = express();
 
@@ -49,6 +52,16 @@ app.get('/api/newboard',
 }
 
 );
+
+
+app.get('/api/newboard',
+
+(req,res) => {
+  res.json(endTurn(req.query.board,req.query.team))
+}
+
+
+)
 
 
 module.exports = app;
