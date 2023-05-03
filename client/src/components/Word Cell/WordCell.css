@@ -1,0 +1,22 @@
+.cell-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cell {
+    border: 0.5rem;
+    border-style: solid;
+    border-color: rgb(20, 20, 20);
+    border-radius: 10px;
+    font-size: larger;
+    width: 100%;
+    height: 100%;
+    max-width: 10rem;
+    max-height: 10rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
