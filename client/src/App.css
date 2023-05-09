@@ -1,15 +1,11 @@
 .App {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    grid-gap: 1rem;
+    gap: 1.5rem;
     justify-content: center;
     align-items: center;
     width: 100vw;
     height: 100vh;
     box-sizing: border-box;
     padding: 50px;
-}
-
-.App > * {
-    aspect-ratio: 1;
 }
