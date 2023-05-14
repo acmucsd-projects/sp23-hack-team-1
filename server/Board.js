@@ -1,6 +1,6 @@
 const createObjectArray = require("./wordGenerator");
 const objectArray = require("./wordGenerator");
-
+let userDictionary = [];
 let Board = function(redScore,blueScore,turn,words){
 
 /*
@@ -19,14 +19,30 @@ this.printBoard = () => {console.log(this)};
 
 
 function newBoard(){
-    newBoard = new Board(9,8,"red",createObjectArray());
+    if(userDictionary.length>=25){
+        newBoard = new Board(9,8,"red",createObjectArray(userDictionary));
+    }else{
+        newBoard = new Board(9,8,"red",createObjectArray())
+    }
     return newBoard;
 }
 
+function customizeNewBoard(dictionary){
+    userDictionary = dictionary;
+    newBoard = newBoard();
+    return newBoard;
+}
 
-module.exports = newBoard;
+function clearDictionary(){
+    userDictionary = [];
+}
 
 
+module.exports = {
+    customizeNewBoard,
+    newBoard,
+    clearDictionary
+  };
 
 
 
