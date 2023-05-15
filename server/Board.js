@@ -70,10 +70,12 @@ function guessWord(index1,sampleBoard) {
         else if (word.type === "blue") {
             word.status = "click";
             sampleBoard.blueScore -= 1;
+            if (sampleBoard.blueScore <= 0){return endGame("blue");};
         }
         else if (word.type === "red") {
             word.status = "click";
             sampleBoard.redScore -= 1;
+            if (sampleBoard.redScore <= 0){return endGame("red");};
         }
 
     }
