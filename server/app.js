@@ -15,8 +15,11 @@ const cors = require("cors");
 const usersRouter = require('./routes/users');
 const Board = require('./Board');
 
+let currentBoard;
+
 const newBoard = Board.newBoard;
 const endTurn = Board.endTurn;
+const guessWord = Board.guessWord;
 
 
 const app = express();
@@ -58,18 +61,30 @@ app.get(
     "/api/newboard",
 
     (req, res) => {
-        res.json(newBoard());
+        currentBoard = newBoard();
+        res.json(currentBoard);
     }
 );
 
 
-
-app.get('/api/newboard',
+app.get("/api/guess",
 
 (req,res) => {
-  res.json(endTurn(req.query.board,req.query.team))
+
+let b = guessWord(req.query.index,currentBoard);
+currentBoard = b;
+res.json(currentBoard);
+
 }
 
+);
+
+
+app.get('/api/endturn',
+
+(req,res) => {
+  res.json(endTurn(currentBoard))
+}
 
 )
 
