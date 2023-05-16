@@ -1,6 +1,6 @@
 import "./WordCell.css";
 
-function WordCell({ cell }) {
+function WordCell({ cell, isPlayer }) {
     const colorDict = new Map([
         ["red", "#ff948c"],
         ["blue", "#68b5e8"],
@@ -8,13 +8,21 @@ function WordCell({ cell }) {
         ["black", "#949494"],
     ]);
 
-    return (
-        <div
-            className="cell"
-            style={{ backgroundColor: colorDict.get(cell.type) }}>
-            <p>{cell.word}</p>
-        </div>
-    );
+    if (isPlayer){
+        return (
+            <div
+            className="cell">
+                <p>{cell.word}</p>
+            </div>
+        )     
+    } else {
+        return (
+            <div
+                className="cell"
+                style={{ backgroundColor: colorDict.get(cell.type) }}>
+                <p>{cell.word}</p>
+            </div>
+        );
+    }
 }
-
-export default WordCell;
+export default WordCell; 
