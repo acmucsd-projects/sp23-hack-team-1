@@ -50,7 +50,7 @@ server.listen(port, hostName, function () {
 });
 
 //create and return a new board based on user's dictionary
-app.get("/api/newBoard", (req, res) => {
+app.get("/api/newboard", (req, res) => {
     //if user did not input their own dictionary, generate new board using default dict
     if (!req.body.customizedDict) {
         res.json(Board.newBoard());
