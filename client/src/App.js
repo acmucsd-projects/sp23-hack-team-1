@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-
 import WordCell from "./components/Word Cell/WordCell";
-
 import "./App.css";
+import Switch from "./components/Switch/Switch"
 
 /**
  * Acquires a board of cards via the api.
@@ -19,16 +18,20 @@ async function getCards(setCards) {
 
 function App() {
     const [cells, setCells] = useState([]);
+    const [isPlayerView, setIsPlayerView] = useState(false);
 
     useEffect(() => {
         getCards(setCells);
     }, []);
 
+    
     return (
         <div className="App">
+            <Switch isPlayerFunction={setIsPlayerView} isPlayer={isPlayerView}/>
             {cells.map((cell, index) => (
-                <WordCell cell={cell} key={`${cell.word}-${index}`} />
+                <WordCell cell={cell} key={`${cell.word}-${index}`} isPlayer={isPlayerView}/>
             ))}
+            
         </div>
     );
 }
