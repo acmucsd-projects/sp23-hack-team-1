@@ -1,3 +1,4 @@
+//comment again 2
 const createObjectArray = require("./wordGenerator");
 const objectArray = require("./wordGenerator");
 
