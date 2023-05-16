@@ -38,7 +38,7 @@ function createObjectArray(dictionary = nouns){
   const numWhiteCards = 7;
 //shuffle an copied noun array
 const shuffledWords = dictionary.slice().sort(() => Math.random() - 0.5);
-const selectedWords = shuffledWords.slice(0, 24);
+const selectedWords = shuffledWords.slice(0, 25);
 let objectArray = [];
 //put 8 red card into object array
 for(let i = 0; i < numRedCards; i++){
@@ -67,7 +67,7 @@ for(let i = numBlueCards + numRedCards; i < numBlueCards + numRedCards + numWhit
 // put 1 black card into object array
 objectArray.push({
     type : "black",
-    word : selectedWords[numBlueCards + numRedCards + numWhiteCards -1],
+    word : selectedWords[numBlueCards + numRedCards + numWhiteCards],
     status : "unclick"
 });
 objectArray = objectArray.sort(() => Math.random() - 0.5);
