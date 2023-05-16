@@ -20,8 +20,23 @@ this.printBoard = () => {console.log(this)};
 
 
 function newBoard(){
-    newBoard = new Board(9,8,"red",createObjectArray());
-    return newBoard;
+    let newboard;
+    if(userDictionary.length>=25){
+        newboard = new Board(9,8,"red",createObjectArray(userDictionary));
+    }else{
+        newboard = new Board(9,8,"red",createObjectArray())
+    }
+    return newboard;
+}
+
+function customizeNewBoard(dictionary){
+    userDictionary = dictionary;
+    let customizedNewBoard = newBoard();
+    return customizedNewBoard;
+}
+
+function clearDictionary(){
+    userDictionary = [];
 }
 
 
@@ -90,12 +105,13 @@ function guessWord(index1,sampleBoard) {
 
 
 //module.exports = newBoard;
-
-exports.newBoard = newBoard;
-
-exports.endTurn = endTurn;
-
-exports.guessWord = guessWord;
+module.exports = {
+    customizeNewBoard,
+    newBoard,
+    clearDictionary,
+    guessWord,
+    endTurn
+  };
 
 
 
