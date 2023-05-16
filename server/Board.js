@@ -19,6 +19,7 @@ this.printBoard = () => {console.log(this)};
 
 
 function newBoard(){
+    let newBoard;
     if(userDictionary.length>=25){
         newBoard = new Board(9,8,"red",createObjectArray(userDictionary));
     }else{
@@ -29,8 +30,7 @@ function newBoard(){
 
 function customizeNewBoard(dictionary){
     userDictionary = dictionary;
-    newBoard = newBoard();
-    return newBoard;
+    return newBoard();
 }
 
 function clearDictionary(){
