@@ -56,16 +56,26 @@ server.listen(port, hostName, function () {
     console.log(`Server1 running on http://${hostName}:${port}`);
 });
 
-//create and return a new board
-app.get(
-    "/api/newboard",
+//create and return a new board based on user's dictionary
+app.post('/api/newboard', (req,res)=>{
+  //if user did not input their own dictionary, generate new board using default dict
+  if (!req.body.customizedDict) {
+    res.json(Board.newBoard());
+  } 
+  //if user did input their own dictionary and it has enough word to turn it into dictionary
+  else if (req.body.customizedDict.length >= 25) {
+    res.json(Board.customizeNewBoard(req.body.customizedDict));
+  }
+  //report an error message if words is not enough
+  else {
+    res.send('Array must have at least 25 elements');
+  }
+});
 
-    (req, res) => {
-        currentBoard = newBoard();
-        res.json(currentBoard);
-    }
-);
-
+app.get('/api/clearDictionary', (req,res)=>{
+  Board.clearDictionary();
+  res.send("user's dictionary is cleared");
+});
 
 app.get("/api/guess",
 
