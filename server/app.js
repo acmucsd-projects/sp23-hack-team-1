@@ -60,6 +60,7 @@ server.listen(port, hostName, function () {
 app.post('/api/newboard', (req,res)=>{
   //if user did not input their own dictionary, generate new board using default dict
   if (!req.body.customizedDict) {
+    currentBoard = newBoard();
     res.json(Board.newBoard());
   } 
   //if user did input their own dictionary and it has enough word to turn it into dictionary
