@@ -58,14 +58,17 @@ server.listen(port, hostName, function () {
 
 //create and return a new board based on user's dictionary
 app.post('/api/newboard', (req,res)=>{
+
+  console.log("bruh");
   //if user did not input their own dictionary, generate new board using default dict
   if (!req.body.customizedDict) {
     currentBoard = newBoard();
-    res.json(Board.newBoard());
+    res.json(currentBoard);
   } 
   //if user did input their own dictionary and it has enough word to turn it into dictionary
   else if (req.body.customizedDict.length >= 25) {
-    res.json(Board.customizeNewBoard(req.body.customizedDict));
+    currentBoard = Board.customizeNewBoard(req.body.customizedDict);
+    res.json(currentBoard);
   }
   //report an error message if words is not enough
   else {
