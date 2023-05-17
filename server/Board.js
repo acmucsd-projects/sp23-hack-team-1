@@ -21,6 +21,7 @@ this.printBoard = () => {console.log(this)};
 
 function newBoard(){
     let newboard;
+    console.log("WTF")
     if(userDictionary.length>=25){
         newboard = new Board(9,8,"red",createObjectArray(userDictionary));
     }else{
