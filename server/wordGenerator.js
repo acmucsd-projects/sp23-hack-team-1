@@ -31,13 +31,13 @@ const nouns = [
   ];
 
 
-function createObjectArray(){
+function createObjectArray(dictionary = nouns){
 
   const numRedCards = 9;
   const numBlueCards = 8;
   const numWhiteCards = 7;
 //shuffle an copied noun array
-const shuffledWords = nouns.slice().sort(() => Math.random() - 0.5);
+const shuffledWords = dictionary.slice().sort(() => Math.random() - 0.5);
 const selectedWords = shuffledWords.slice(0, 25);
 let objectArray = [];
 //put 8 red card into object array

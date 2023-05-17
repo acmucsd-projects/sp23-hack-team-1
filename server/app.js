@@ -17,6 +17,7 @@ const Board = require('./Board');
 
 let currentBoard;
 
+
 const newBoard = Board.newBoard;
 const endTurn = Board.endTurn;
 const guessWord = Board.guessWord;
@@ -59,7 +60,7 @@ server.listen(port, hostName, function () {
 //create and return a new board based on user's dictionary
 app.post('/api/newboard', (req,res)=>{
 
-  console.log("bruh");
+  
   //if user did not input their own dictionary, generate new board using default dict
   if (!req.body.customizedDict) {
     currentBoard = newBoard();
@@ -67,7 +68,9 @@ app.post('/api/newboard', (req,res)=>{
   } 
   //if user did input their own dictionary and it has enough word to turn it into dictionary
   else if (req.body.customizedDict.length >= 25) {
+    //console.log("customizedDict is "+ req.body.customizedDict);
     currentBoard = Board.customizeNewBoard(req.body.customizedDict);
+    
     res.json(currentBoard);
   }
   //report an error message if words is not enough
