@@ -2,7 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-
+require("dotenv").config();
 //Gonzalo trying out server
 const http = require("http");
 const hostName = "127.0.0.1";
@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(
     cors({
-        origin: "http://localhost:3001",
+        origin: "*", // changing this for heroku, it seems bad for security though. it was "http://localhost:3001",
         credentials: true,
     })
 );
@@ -53,7 +53,7 @@ const server = http.createServer(app);
 
 //prints a log once the server starts listening
 
-server.listen(port, hostName, function () {
+server.listen(process.env.PORT || port, hostName, function () {
     console.log(`Server1 running on http://${hostName}:${port}`);
 });
 
