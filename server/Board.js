@@ -1,126 +1,113 @@
 //comment again 2
 const createObjectArray = require("./wordGenerator");
-const objectArray = require("./wordGenerator");
 
-let Board = function(redScore,blueScore,turn,words){
+let userDictionary = [];
 
-/*
+let Board = function (redScore, blueScore, turn, words) {
+    /*
 This function represents the current state of the board. it keeps track of the words remaining for red & blue (ints),
 whose turn it is ("red" or "blue"), and the board of words (an objectArray array)
 */
 
-this.redScore = redScore;
-this.blueScore = blueScore;
-this.turn = turn;
-this.words = words;
+    this.redScore = redScore;
+    this.blueScore = blueScore;
+    this.turn = turn;
+    this.words = words;
 
-this.printBoard = () => {console.log(this)};
+    this.printBoard = () => {
+        console.log(this);
+    };
+};
 
-}
-
-
-function newBoard(){
+function newBoard() {
     let newboard;
-    if(userDictionary.length>=25){
-        newboard = new Board(9,8,"red",createObjectArray(userDictionary));
-    }else{
-        newboard = new Board(9,8,"red",createObjectArray())
+    if (userDictionary.length >= 25) {
+        newboard = new Board(9, 8, "red", createObjectArray(userDictionary));
+    } else {
+        newboard = new Board(9, 8, "red", createObjectArray());
     }
     return newboard;
 }
 
-function customizeNewBoard(dictionary){
+function customizeNewBoard(dictionary) {
     userDictionary = dictionary;
     let customizedNewBoard = newBoard();
     return customizedNewBoard;
 }
 
-function clearDictionary(){
+function clearDictionary() {
     userDictionary = [];
 }
 
-
 //changes the current team's turn to pick words
-function endTurn(board){
-if (board.turn === "red") {board.turn = "blue"}
-else if (board.turn == "blue"){board.turn = "red"}
-else {board.turn = "Something weird happened, check the request"};
-return board;
-
+function endTurn(board) {
+    if (board.turn === "red") {
+        board.turn = "blue";
+    } else if (board.turn == "blue") {
+        board.turn = "red";
+    } else {
+        board.turn = "Something weird happened, check the request";
+    }
+    return board;
 }
 
-
-function endGame(team){
-    return team +" has won! play again?"
+function endGame(team) {
+    return team + " has won! play again?";
     //do more here later
 }
 
 //index is an int
-function guessWord(index1,sampleBoard) {
-   
+function guessWord(index1, sampleBoard) {
     index1 = parseInt(index1);
-    if (index1 === undefined|| index1 <0 || index1 > 24) {return "index1 not valid"};
+    if (index1 === undefined || index1 < 0 || index1 > 24) {
+        return "index1 not valid";
+    }
     let word = sampleBoard.words[index1];
 
-    
-
-    console.log("inside guess word, we are changing this square:  " + word.word);
+    console.log(
+        "inside guess word, we are changing this square:  " + word.word
+    );
     if (word) {
+        // console.log("\nsuccessfully found word\n, status is " + sampleBoard.words.selectedWord.status + "and color is "+ sampleBoard.words.selectedWord.type);
 
-
-       // console.log("\nsuccessfully found word\n, status is " + sampleBoard.words.selectedWord.status + "and color is "+ sampleBoard.words.selectedWord.type);
-
-        if (word.status === "click") {return "Error, word already clicked";};
-
+        if (word.status === "click") {
+            return "Error, word already clicked";
+        }
 
         if (word.type === "black") {
-            team = sampleBoard.turn === 'red' ? 'blue' : 'red';
+            team = sampleBoard.turn === "red" ? "blue" : "red";
             return endGame(team);
-        }
-
-        else if (word.type === "white") {
+        } else if (word.type === "white") {
             word.status = "click";
-            
-        }
-
-        else if (word.type === "blue") {
+        } else if (word.type === "blue") {
             word.status = "click";
             sampleBoard.blueScore -= 1;
-            if (sampleBoard.blueScore <= 0){return endGame("blue");};
-        }
-        else if (word.type === "red") {
+            if (sampleBoard.blueScore <= 0) {
+                return endGame("blue");
+            }
+        } else if (word.type === "red") {
             word.status = "click";
             sampleBoard.redScore -= 1;
-            if (sampleBoard.redScore <= 0){return endGame("red");};
+            if (sampleBoard.redScore <= 0) {
+                return endGame("red");
+            }
         }
-
+    } else {
+        console.log("word not found");
     }
-    else {console.log("word not found")};
-    
+
     return sampleBoard;
 }
 
+function customizeNewBoard(dictionary) {
+    userDictionary = dictionary;
+    return newBoard();
+}
 
-
-
-
-//module.exports = newBoard;
 module.exports = {
     customizeNewBoard,
     newBoard,
     clearDictionary,
     guessWord,
-    endTurn
-  };
-
-
-
-
-
-
-
-
-
-
-
-
+    endTurn,
+};

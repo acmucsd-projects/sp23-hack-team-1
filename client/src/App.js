@@ -10,7 +10,16 @@ import Switch from "./components/Switch/Switch"
  * @returns {void}
  */
 async function getCards(setCards) {
-    const response = await fetch("http://127.0.0.1:8001/api/newboard");
+    const response = await fetch("http://127.0.0.1:8001/api/newboard", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            // custom word dictionary goes here ... 
+        }),        
+    });
     const jsonData = await response.json();
     console.log(jsonData);
     setCards(jsonData.words);

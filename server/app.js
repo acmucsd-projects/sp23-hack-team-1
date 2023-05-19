@@ -12,15 +12,14 @@ const cors = require("cors");
 
 //end server
 
-const usersRouter = require('./routes/users');
-const Board = require('./Board');
+const usersRouter = require("./routes/users");
+const Board = require("./Board");
 
 let currentBoard;
 
 const newBoard = Board.newBoard;
 const endTurn = Board.endTurn;
 const guessWord = Board.guessWord;
-
 
 const app = express();
 
@@ -30,7 +29,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(
     cors({
-        origin: "http://localhost:3001",
+        origin: "http://localhost:3000",
         credentials: true,
     })
 );
@@ -57,47 +56,42 @@ server.listen(port, hostName, function () {
 });
 
 //create and return a new board based on user's dictionary
-app.post('/api/newboard', (req,res)=>{
-  //if user did not input their own dictionary, generate new board using default dict
-  if (!req.body.customizedDict) {
-    res.json(Board.newBoard());
-  } 
-  //if user did input their own dictionary and it has enough word to turn it into dictionary
-  else if (req.body.customizedDict.length >= 25) {
-    res.json(Board.customizeNewBoard(req.body.customizedDict));
-  }
-  //report an error message if words is not enough
-  else {
-    res.send('Array must have at least 25 elements');
-  }
+app.post("/api/newboard", (req, res) => {
+    //if user did not input their own dictionary, generate new board using default dict
+    if (!req.body.customizedDict) {
+        res.json(Board.newBoard());
+    }
+    //if user did input their own dictionary and it has enough word to turn it into dictionary
+    else if (req.body.customizedDict.length >= 25) {
+        res.json(Board.customizeNewBoard(req.body.customizedDict));
+    }
+    //report an error message if words is not enough
+    else {
+        res.send("Array must have at least 25 elements");
+    }
 });
 
-app.get('/api/clearDictionary', (req,res)=>{
-  Board.clearDictionary();
-  res.send("user's dictionary is cleared");
+app.get("/api/clearDictionary", (req, res) => {
+    Board.clearDictionary();
+    res.send("user's dictionary is cleared");
 });
 
-app.get("/api/guess",
+app.get(
+    "/api/guess",
 
-(req,res) => {
-
-let b = guessWord(req.query.index,currentBoard);
-currentBoard = b;
-res.json(currentBoard);
-
-}
-
+    (req, res) => {
+        let b = guessWord(req.query.index, currentBoard);
+        currentBoard = b;
+        res.json(currentBoard);
+    }
 );
 
+app.get(
+    "/api/endturn",
 
-app.get('/api/endturn',
-
-(req,res) => {
-  res.json(endTurn(currentBoard))
-}
-
-)
-
+    (req, res) => {
+        res.json(endTurn(currentBoard));
+    }
+);
 
 module.exports = app;
-
