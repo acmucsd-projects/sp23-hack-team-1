@@ -15,7 +15,7 @@ const cors = require("cors");
 const usersRouter = require("./routes/users");
 const Board = require("./Board");
 
-let currentBoard;
+let currentBoard = {};
 
 const newBoard = Board.newBoard;
 const endTurn = Board.endTurn;
@@ -61,7 +61,8 @@ server.listen(port, hostName, function () {
 app.post("/api/newboard", (req, res) => {
     //if user did not input their own dictionary, generate new board using default dict
     if (!req.body.customizedDict) {
-        res.json(Board.newBoard());
+        currentBoard = Board.newBoard();
+        res.json(currentBoard);
     }
     //if user did input their own dictionary and it has enough word to turn it into dictionary
     else if (req.body.customizedDict.length >= 25) {

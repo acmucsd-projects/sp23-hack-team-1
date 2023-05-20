@@ -3,6 +3,8 @@ import WordCell from "./components/Word Cell/WordCell";
 import "./App.css";
 import Switch from "./components/Switch/Switch"
 
+
+
 /**
  * Acquires a board of cards via the api.
  * @param {import("react").SetStateAction} setCards
@@ -33,12 +35,23 @@ function App() {
         getCards(setCells);
     }, []);
 
+    async function handleCardClick(index, ) {
+        const response = await fetch(`http://127.0.0.1:8001/api/guess?index=${index}`)
+        const jsonData = await response.json();
+        console.log(jsonData);
+        if (jsonData === "blue has won! play again?" || jsonData === "blue has won! play again?") {
+            setCells([]);
+        }
+        else {
+            setCells(jsonData.words);
+        }
+    }
     
     return (
         <div className="App">
             <Switch isPlayerFunction={setIsPlayerView} isPlayer={isPlayerView}/>
             {cells.map((cell, index) => (
-                <WordCell cell={cell} key={`${cell.word}-${index}`} isPlayer={isPlayerView}/>
+                <WordCell cell={cell} key={`${cell.word}-${index}`} isPlayer={isPlayerView} handleCardClick={handleCardClick}/> 
             ))}
             
         </div>
