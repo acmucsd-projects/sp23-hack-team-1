@@ -34,6 +34,15 @@ app.use(
     })
 );
 
+// NOTE: just for development purposes. some reason there is conflict
+// on mac and no conflict on windows ...
+app.use(
+    cors({
+        origin: "http://localhost:3001",
+        credentials: true,
+    })
+);
+
 app.use("/users", usersRouter);
 
 dotenv.config();
