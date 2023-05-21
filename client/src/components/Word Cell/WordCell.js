@@ -1,6 +1,6 @@
 import "./WordCell.css";
 
-function WordCell({ cell, isPlayer }) {
+function WordCell({ cell, isPlayer, handleCardClick }) {
     const colorDict = new Map([
         ["red", "#ff948c"],
         ["blue", "#68b5e8"],
@@ -9,12 +9,23 @@ function WordCell({ cell, isPlayer }) {
     ]);
 
     if (isPlayer){
-        return (
-            <div
-            className="cell">
-                <p>{cell.word}</p>
-            </div>
-        )     
+        if (cell.status === "unclick") {
+            return (
+                <div
+                className="cell" onClick={() => handleCardClick(cell.index)}>
+                    <p>{cell.word}</p>
+                </div>
+            )
+        }  
+        else {
+            return (
+                <div
+                    className="cell"
+                    style={{ backgroundColor: colorDict.get(cell.type) }}>
+                    <p>{cell.word}</p>
+                </div>
+            );
+        }
     } else {
         return (
             <div
