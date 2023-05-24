@@ -12,7 +12,7 @@ const cors = require("cors");
 
 //end server
 
-const usersRouter = require('./routes/users');
+//const usersRouter = require('./routes/users');
 const Board = require('./Board');
 
 let currentBoard;
@@ -25,9 +25,9 @@ const guessWord = Board.guessWord;
 
 const app = express();
 
-app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+//app.use(logger("dev"));
+//app.use(express.json());
+//app.use(express.urlencoded({ extended: false }));
 
 app.use(
     cors({
@@ -36,7 +36,7 @@ app.use(
     })
 );
 
-app.use("/users", usersRouter);
+//app.use("/users", usersRouter);
 
 dotenv.config();
 
