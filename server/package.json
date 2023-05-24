@@ -5,6 +5,10 @@
   "scripts": {
     "start": "node ./bin/www"
   },
+  "engines" : { 
+    
+    "node" : "16.20"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "debug": "~2.6.9",
