@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 require("dotenv").config();
 //Gonzalo trying out server
 const http = require("http");
-const hostName = "127.0.0.1";
+//const hostName = "127.0.0.1";
 const port = 8001;
 
 const cors = require("cors");
@@ -14,6 +14,7 @@ const cors = require("cors");
 
 //const usersRouter = require('./routes/users');
 const Board = require('./Board');
+const { application } = require("express");
 
 let currentBoard;
 
@@ -26,7 +27,7 @@ const guessWord = Board.guessWord;
 const app = express();
 
 //app.use(logger("dev"));
-//app.use(express.json());
+app.use(express.json());
 //app.use(express.urlencoded({ extended: false }));
 
 app.use(
@@ -52,9 +53,9 @@ mongoose.connect(process.env.DB_URL, {
 const server = http.createServer(app);
 
 //prints a log once the server starts listening
-
-server.listen(process.env.PORT || port, hostName, function () {
-    console.log(`Server1 running on http://${hostName}:${port}`);
+//change back to server.listen if needed
+server.listen(process.env.PORT || port, () => {
+    console.log(`Server1 running on port ${process.env.PORT}`);
 });
 
 //create and return a new board based on user's dictionary
@@ -102,6 +103,12 @@ app.get('/api/endturn',
 (req,res) => {
   res.json(endTurn(currentBoard))
 }
+
+)
+
+app.get('/',
+
+(req,res) => {res.json(currentBoard)}
 
 )
 
