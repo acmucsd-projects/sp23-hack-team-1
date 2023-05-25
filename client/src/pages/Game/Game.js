@@ -4,12 +4,13 @@ import "./Game.css";
 import Switch from "../../components/Switch/Switch";
 import Counter from "../../components/Counter/Counter";
 import SpyInput from "../../components/SpyInput/SpyInput";
+import MessageBox from "../../components/MessageBox/MessageBox";
 
 const Turns = {
-    RedSpy: "redspy",
-    BlueSpy: "bluespy",
-    RedGuess: "redguess",
-    BlueGuess: "blueguess",
+    RedSpy: "Red Spy",
+    BlueSpy: "Blue Spy",
+    RedGuess: "Red Guess",
+    BlueGuess: "Blue Guess",
 };
 
 /**
@@ -42,7 +43,7 @@ function Game() {
     const [guessesLeft, setGuessesLeft] = useState(0);
     const [currentGuess, setCurrentGuess] = useState("");
 
-    const [turn, setTurn] = useState(Turns.RedGuess);
+    const [turn, setTurn] = useState(Turns.RedSpy);
 
     useEffect(() => {
         getCards(setCells);
@@ -71,6 +72,9 @@ function Game() {
 
     return (
         <div className="Game">
+            <MessageBox
+                playerTurn={turn}
+            />
             <Switch
                 isPlayerFunction={setIsPlayerView}
                 isPlayer={isPlayerView}
@@ -82,6 +86,7 @@ function Game() {
                     setCurrentGuess={setCurrentGuess}
                 />
             )}
+             <div className="cell-grid">
             {cells.map((cell, index) => (
                 <WordCell
                     cell={cell}
@@ -90,6 +95,7 @@ function Game() {
                     handleCardClick={handleCardClick}
                 />
             ))}
+            </div>
         </div>
     );
 }
