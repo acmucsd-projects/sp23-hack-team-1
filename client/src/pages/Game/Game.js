@@ -44,6 +44,11 @@ function Game() {
 
     const [turn, setTurn] = useState(Turns.RedSpy);
 
+    const [guessesLeft, setGuessesLeft] = useState(0);
+    const [currentGuess, setCurrentGuess] = useState("");
+
+    const [turn, setTurn] = useState(Turns.RedSpy);
+
     useEffect(() => {
         getCards(setCells);
     }, []);
