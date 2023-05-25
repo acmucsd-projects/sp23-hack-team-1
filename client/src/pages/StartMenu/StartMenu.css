@@ -1,0 +1,27 @@
+.StartMenu {
+    display:flex;
+    flex-direction: column;
+}
+
+.inputContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* Add margin as needed */
+  }
+
+.inputContainer label {
+    margin-right: 10px; /* Add margin between label and textarea */
+  }
+  
+  
+.UserInputButon {
+    background-color: aqua;
+    width: 200px;
+}
+
+.Random {
+    background-color: green;
+    width: 200px;
+}
+
+
