@@ -39,7 +39,7 @@ function Game() {
         const response = await fetch(`http://127.0.0.1:8001/api/guess?index=${index}`)
         const jsonData = await response.json();
         console.log(jsonData);
-        if (jsonData === "blue has won! play again?" || jsonData === "blue has won! play again?") {
+        if (jsonData === "blue has won! play again?" || jsonData === "red has won! play again?") {
             setCells([]);
         }
         else {
