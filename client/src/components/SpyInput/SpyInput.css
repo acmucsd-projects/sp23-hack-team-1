@@ -1,0 +1,52 @@
+.spy {
+    position: fixed;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    left: 50%;
+    top: 90%;
+    height: 60px;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 255, 255);
+    border-color: darkgray;
+    border-width: 0.5rem;
+    border-style: solid;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+}
+
+.spy-word {
+    width: 5rem;
+    height: 1.3rem;
+    margin-left: 0.5rem;
+    font-size: large;
+    margin-right: 0.5rem;
+}
+
+.spy-amount {
+    width: 3rem;
+    height: 1.3rem;
+    margin-left: 0.5rem;
+    font-size: large;
+    margin-right: 0.5rem;
+}
+
+.submit-button {
+    margin-left: 1rem;
+    font-size: large;
+    width: 5rem;
+    height: 2.5rem;
+    background-color: lightgray;
+    border-style: solid;
+    border-color: black;
+    border-radius: 0.3rem;
+    border-width: 0.2rem;
+}
+
+.submit-button:hover {
+    cursor: pointer;
+    background-color: white;
+}
