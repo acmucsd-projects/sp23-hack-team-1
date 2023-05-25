@@ -42,12 +42,7 @@ function Game() {
     const [guessesLeft, setGuessesLeft] = useState(0);
     const [currentGuess, setCurrentGuess] = useState("");
 
-    const [turn, setTurn] = useState(Turns.RedSpy);
-
-    const [guessesLeft, setGuessesLeft] = useState(0);
-    const [currentGuess, setCurrentGuess] = useState("");
-
-    const [turn, setTurn] = useState(Turns.RedSpy);
+    const [turn, setTurn] = useState(Turns.RedGuess);
 
     useEffect(() => {
         getCards(setCells);
