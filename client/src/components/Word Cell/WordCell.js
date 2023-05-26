@@ -1,6 +1,7 @@
 import "./WordCell.css";
+import { Turns } from "../../pages/Game/Game";
 
-function WordCell({ cell, isPlayer, handleCardClick }) {
+function WordCell({ cell, turn, handleCardClick }) {
     const colorDict = new Map([
         ["red", "#ff948c"],
         ["blue", "#68b5e8"],
@@ -8,16 +9,16 @@ function WordCell({ cell, isPlayer, handleCardClick }) {
         ["black", "#949494"],
     ]);
 
-    if (isPlayer){
+    if (turn === Turns.RedGuess || turn === Turns.BlueGuess) {
         if (cell.status === "unclick") {
             return (
                 <div
-                className="cell" onClick={() => handleCardClick(cell.index)}>
+                    className="cell"
+                    onClick={() => handleCardClick(cell.index)}>
                     <p>{cell.word}</p>
                 </div>
-            )
-        }  
-        else {
+            );
+        } else {
             return (
                 <div
                     className="cell"
@@ -36,4 +37,4 @@ function WordCell({ cell, isPlayer, handleCardClick }) {
         );
     }
 }
-export default WordCell; 
+export default WordCell;

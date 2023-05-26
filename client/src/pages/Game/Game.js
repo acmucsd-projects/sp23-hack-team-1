@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import WordCell from "../../components/Word Cell/WordCell";
 import "./Game.css";
-import Switch from "../../components/Switch/Switch";
 import Counter from "../../components/Counter/Counter";
 import SpyInput from "../../components/SpyInput/SpyInput";
 import MessageBox from "../../components/MessageBox/MessageBox";
@@ -37,11 +36,9 @@ async function getCards(setCards) {
 
 function Game() {
     const [cells, setCells] = useState([]);
-    const [isPlayerView, setIsPlayerView] = useState(false);
     const [playerGuess, setPlayerGuess] = useState(0);
 
-    const [guessesLeft, setGuessesLeft] = useState(0);
-    const [currentGuess, setCurrentGuess] = useState("");
+    const [currentWordGuess, setCurrentWordGuess] = useState("");
 
     const [turn, setTurn] = useState(Turns.RedSpy);
 
@@ -50,7 +47,8 @@ function Game() {
     }, []);
 
     async function handleCardClick(index) {
-        if (playerGuess === 0) {
+        if (playerGuess <= 0) {
+            handleTurnEnd();
             return;
         } //doesn't change color because no more guesses
         const response = await fetch(
@@ -67,6 +65,29 @@ function Game() {
             setPlayerGuess((playerGuess) => playerGuess - 1);
             setCells(jsonData.words);
             console.log(playerGuess);
+            if (playerGuess - 1 <= 0) {
+                handleTurnEnd();
+                return;
+            }
+        }
+    }
+
+    async function handleTurnEnd() {
+        if (turn === Turns.BlueSpy) {
+            setTurn(Turns.BlueGuess);
+        } else if (turn === Turns.RedSpy) {
+            setTurn(Turns.RedGuess);
+        } else {
+            // call api
+            const response = await fetch(`http://127.0.0.1:8001/api/endturn`);
+            const jsonData = await response.json();
+            console.log(jsonData);
+            setCells(jsonData.words);
+            if (turn === Turns.BlueGuess) {
+                setTurn(Turns.RedSpy);
+            } else {
+                setTurn(Turns.BlueSpy);
+            }
         }
     }
 
@@ -75,15 +96,17 @@ function Game() {
             <MessageBox
                 playerTurn={turn}
             />
-            <Switch
-                isPlayerFunction={setIsPlayerView}
-                isPlayer={isPlayerView}
-            />
-            <Counter guessAmount={playerGuess} />
+            {(turn === Turns.RedGuess || turn === Turns.BlueGuess) && (
+                <Counter
+                    wordGuess={currentWordGuess}
+                    guessAmount={playerGuess}
+                />
+            )}
             {(turn === Turns.BlueSpy || turn === Turns.RedSpy) && (
                 <SpyInput
-                    setGuessesLeft={setGuessesLeft}
-                    setCurrentGuess={setCurrentGuess}
+                    setGuessesLeft={setPlayerGuess}
+                    setCurrentWordGuess={setCurrentWordGuess}
+                    changeTurn={handleTurnEnd}
                 />
             )}
              <div className="cell-grid">
@@ -91,7 +114,7 @@ function Game() {
                 <WordCell
                     cell={cell}
                     key={`${cell.word}-${index}`}
-                    isPlayer={isPlayerView}
+                    turn={turn}
                     handleCardClick={handleCardClick}
                 />
             ))}
