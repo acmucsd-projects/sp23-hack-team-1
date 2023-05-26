@@ -38,9 +38,9 @@ function Game() {
     const [cells, setCells] = useState([]);
     const [playerGuess, setPlayerGuess] = useState(0);
 
-    const [currentWordGuess, setCurrentWordGuess] = useState("");
+    const [currentWordGuess, setCurrentWordGuess] = useState("test");
 
-    const [turn, setTurn] = useState(Turns.RedSpy);
+    const [turn, setTurn] = useState(Turns.RedGuess);
 
     useEffect(() => {
         getCards(setCells);
@@ -93,9 +93,7 @@ function Game() {
 
     return (
         <div className="Game">
-            <MessageBox
-                playerTurn={turn}
-            />
+            <MessageBox playerTurn={turn} />
             {(turn === Turns.RedGuess || turn === Turns.BlueGuess) && (
                 <Counter
                     wordGuess={currentWordGuess}
@@ -109,15 +107,15 @@ function Game() {
                     changeTurn={handleTurnEnd}
                 />
             )}
-             <div className="cell-grid">
-            {cells.map((cell, index) => (
-                <WordCell
-                    cell={cell}
-                    key={`${cell.word}-${index}`}
-                    turn={turn}
-                    handleCardClick={handleCardClick}
-                />
-            ))}
+            <div className="cell-grid">
+                {cells.map((cell, index) => (
+                    <WordCell
+                        cell={cell}
+                        key={`${cell.word}-${index}`}
+                        turn={turn}
+                        handleCardClick={handleCardClick}
+                    />
+                ))}
             </div>
         </div>
     );

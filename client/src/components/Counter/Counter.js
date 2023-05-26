@@ -3,8 +3,9 @@ import "./Counter.css";
 function Counter({ wordGuess, guessAmount }) {
     return (
         <div className="counter">
-            <div className="word">{wordGuess}: </div>
-            <div>{guessAmount}</div>
+            <div className="word">
+                "{wordGuess}" : {guessAmount}
+            </div>
         </div>
     );
 }
