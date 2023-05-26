@@ -3,12 +3,13 @@ import WordCell from "../../components/Word Cell/WordCell";
 import "./Game.css";
 import Counter from "../../components/Counter/Counter";
 import SpyInput from "../../components/SpyInput/SpyInput";
+import MessageBox from "../../components/MessageBox/MessageBox";
 
 const Turns = {
-    RedSpy: "redspy",
-    BlueSpy: "bluespy",
-    RedGuess: "redguess",
-    BlueGuess: "blueguess",
+    RedSpy: "Red Spy",
+    BlueSpy: "Blue Spy",
+    RedGuess: "Red Guess",
+    BlueGuess: "Blue Guess",
 };
 
 /**
@@ -92,6 +93,9 @@ function Game() {
 
     return (
         <div className="Game">
+            <MessageBox
+                playerTurn={turn}
+            />
             {(turn === Turns.RedGuess || turn === Turns.BlueGuess) && (
                 <Counter
                     wordGuess={currentWordGuess}
@@ -105,6 +109,7 @@ function Game() {
                     changeTurn={handleTurnEnd}
                 />
             )}
+             <div className="cell-grid">
             {cells.map((cell, index) => (
                 <WordCell
                     cell={cell}
@@ -113,6 +118,7 @@ function Game() {
                     handleCardClick={handleCardClick}
                 />
             ))}
+            </div>
         </div>
     );
 }

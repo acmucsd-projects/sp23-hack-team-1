@@ -1,0 +1,39 @@
+.red-message-box {
+    color: #ff7272;
+    /* border-color: #ff7272; */
+    width: 300px;
+    height: 70px;
+    background-color: #ffffff;
+    border: 8px solid #ff7d7d;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    size: 100px;
+    margin-bottom: 10px;
+    position: fixed;
+    left: 50%;
+    top: 10%;
+    transform: translate(-50%, -50%);
+    font-size: 40px;
+}
+
+.blue-message-box {
+    color: #72c2ff;
+    /* border-color: #ff7272; */
+    width: 300px;
+    height: 70px;
+    background-color: #ffffff;
+    border: 8px solid #7da8ff;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    size: 100px;
+    margin-bottom: 10px;
+    position: fixed;
+    left: 50%;
+    top: 10%;
+    transform: translate(-50%, -50%);
+    font-size: 40px;
+}
