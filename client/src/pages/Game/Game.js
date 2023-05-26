@@ -38,9 +38,9 @@ function Game() {
     const [cells, setCells] = useState([]);
     const [playerGuess, setPlayerGuess] = useState(0);
 
-    const [currentWordGuess, setCurrentWordGuess] = useState("test");
+    const [currentWordGuess, setCurrentWordGuess] = useState();
 
-    const [turn, setTurn] = useState(Turns.RedGuess);
+    const [turn, setTurn] = useState(Turns.RedSpy);
 
     useEffect(() => {
         getCards(setCells);
