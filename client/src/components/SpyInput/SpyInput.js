@@ -1,13 +1,13 @@
 import "./SpyInput.css";
 
-function SpyInput({ setGuessesLeft, setCurrentGuess, changeTurn }) {
+function SpyInput({ setGuessesLeft, setCurrentWordGuess, changeTurn }) {
     return (
         <div className="spy">
             <div>Word:</div>
             <input
                 className="spy-word"
                 type="text"
-                onChange={(e) => setCurrentGuess(e.target.value)}
+                onChange={(e) => setCurrentWordGuess(e.target.value)}
             />
             <div>Amount:</div>
             <input
@@ -18,7 +18,7 @@ function SpyInput({ setGuessesLeft, setCurrentGuess, changeTurn }) {
             <button
                 type="button"
                 className="submit-button"
-                onSubmit={() => changeTurn()}>
+                onClick={() => changeTurn()}>
                 Submit
             </button>
         </div>

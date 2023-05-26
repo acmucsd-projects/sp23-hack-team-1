@@ -1,11 +1,12 @@
-import "./Counter.css"
+import "./Counter.css";
 
-function Counter({ guessAmount }){
-    return(
-        <div className = "counter">
-            { guessAmount }
+function Counter({ wordGuess, guessAmount }) {
+    return (
+        <div className="counter">
+            <div className="word">{wordGuess}: </div>
+            <div>{guessAmount}</div>
         </div>
-    )
+    );
 }
 
-export default Counter; 
+export default Counter;
