@@ -1,4 +1,4 @@
-.Game {
+.cell-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1.5rem;
@@ -9,4 +9,5 @@
     box-sizing: border-box;
     padding: 50px;
     padding-bottom: 150px;
+    padding-top: 150px;
 }
