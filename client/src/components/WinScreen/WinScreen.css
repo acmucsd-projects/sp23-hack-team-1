@@ -1,0 +1,52 @@
+.win-screen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(
+        0,
+        0,
+        0,
+        0.5
+    ); /* Adjust the alpha value to change the dimness of the background */
+    z-index: 999;
+    opacity: 1;
+    animation: fade-out 3s linear forwards;
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.win-screen-content {
+    /* font-size: 24px; */
+    color: white;
+    animation: grow-and-fade 2s cubic-bezier(0.21, 0.79, 0.72, 0.98) forwards;
+}
+
+@keyframes grow-and-fade {
+    0% {
+        opacity: 1;
+        font-size: 24px;
+    }
+    75% {
+        font-size: 64px;
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        font-size: 64px;
+    }
+}
