@@ -1,7 +1,8 @@
 import Game from "./pages/Game/Game";
+import StartMenu from "./pages/StartMenu/StartMenu";
 
 function App() {
-    return <Game />;
+    return <StartMenu />;
 }
 
 export default App;

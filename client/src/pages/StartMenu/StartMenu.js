@@ -7,19 +7,19 @@ function StartMenu() {
 
     const handleUserInput = (e) => {
         setWordBank(e.target.value);
-        console.log(wordBank);
     };
 
     const handleUserInputButtonClick = () => {
-        setWordBank(wordBank);
         setUserWords(wordBank.split(","));
-        console.log(userWords); // Move the console.log() statement inside the click handler
+        console.log(userWords);
     };
 
     return (
         <div className="StartMenu">
+            <img src="./spy.png" alt="a spy" width={200} />
+            <div className="title">Code Names - ACM</div>
             <div className="inputContainer">
-                <label htmlFor="userInput">Input your own:</label>
+                <label htmlFor="userInput">Input your own words:</label>
                 <textarea id="userInput" onChange={handleUserInput}></textarea>
             </div>
             <button

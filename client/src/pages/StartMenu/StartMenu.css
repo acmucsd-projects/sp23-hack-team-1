@@ -1,27 +1,69 @@
+.title {
+    width: 100%;
+    margin-bottom: 2rem;
+    font-size: 3rem;
+    text-align: center;
+    color: #333;
+    font-weight: 700;
+    text-shadow: 2px 2px 0px #ddd;
+}
+
 .StartMenu {
-    display:flex;
+    display: flex;
     flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
 }
 
 .inputContainer {
     display: flex;
     align-items: center;
-    margin-bottom: 10px; /* Add margin as needed */
-  }
+    margin-bottom: 2rem;
+}
 
 .inputContainer label {
-    margin-right: 10px; /* Add margin between label and textarea */
-  }
-  
-  
+    margin-right: 1rem;
+    font-size: 1.5rem;
+    color: #555;
+    font-weight: 500;
+}
+
+#userInput {
+    width: 60%;
+    padding: 1rem;
+    border: 2px solid #bbb;
+    border-radius: 5px;
+    font-size: 1.2rem;
+}
+
+.UserInputButon,
+.Random {
+    padding: 1rem 2rem;
+    margin-top: 1rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    color: #fff;
+    transition: background-color 0.3s ease;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
 .UserInputButon {
-    background-color: aqua;
-    width: 200px;
+    background-color: #007bff;
+}
+
+.UserInputButon:hover {
+    background-color: #0056b3;
 }
 
 .Random {
-    background-color: green;
-    width: 200px;
+    background-color: #dc3545;
 }
 
-
+.Random:hover {
+    background-color: #b02a37;
+}
