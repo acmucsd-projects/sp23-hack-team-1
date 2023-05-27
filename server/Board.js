@@ -1,5 +1,8 @@
 //comment again 2
 const createObjectArray = require("./wordGenerator");
+const objectArray = require("./wordGenerator");
+let userDictionary = [];
+
 
 let userDictionary = [];
 
@@ -14,17 +17,17 @@ whose turn it is ("red" or "blue"), and the board of words (an objectArray array
     this.turn = turn;
     this.words = words;
 
-    this.printBoard = () => {
-        console.log(this);
-    };
-};
+
+this.printBoard = () => {console.log(this)};
 
 function newBoard() {
     let newboard;
-    if (userDictionary.length >= 25) {
-        newboard = new Board(9, 8, "red", createObjectArray(userDictionary));
-    } else {
-        newboard = new Board(9, 8, "red", createObjectArray());
+    
+    if(userDictionary.length>=25){
+        console.log("we triggered custom board")
+        newboard = new Board(9,8,"red",createObjectArray(userDictionary));
+    }else{
+        newboard = new Board(9,8,"red",createObjectArray())
     }
     return newboard;
 }
@@ -32,6 +35,8 @@ function newBoard() {
 function customizeNewBoard(dictionary) {
     userDictionary = dictionary;
     let customizedNewBoard = newBoard();
+    console.log("returning this: " +customizedNewBoard.words[0]);
+    
     return customizedNewBoard;
 }
 
