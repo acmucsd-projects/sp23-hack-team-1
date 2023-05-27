@@ -40,14 +40,17 @@ app.use("/users", usersRouter);
 
 dotenv.config();
 
-//NO DB YET
-/*
+
 mongoose.connect(process.env.DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true }).then(() => {
   console.log('Connected to MongoDB database');
 });
-*/
+
+const UserSchema = mongoose.Schema({
+    id:{type: String, required: true},
+    password:{type: String, required: true},});
+
 
 const server = http.createServer(app);
 
