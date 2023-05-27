@@ -3,11 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start":  "node app.js"
+    "start": "node app.js"
   },
-  "engines" : { 
-    
-    "node" : "16.20"
+  "engines": {
+    "node": "16.20"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -16,6 +15,7 @@
     "express": "~4.16.1",
     "http": "^0.0.1-security",
     "mongoose": "^5.11.13",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "socket.io": "^4.6.1"
   }
 }

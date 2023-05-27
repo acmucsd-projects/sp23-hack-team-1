@@ -2,6 +2,9 @@ const express = require("express");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+
+
+
 require("dotenv").config();
 //Gonzalo trying out server
 const http = require("http");
@@ -52,6 +55,11 @@ mongoose.connect(process.env.DB_URL, {
 
 const server = http.createServer(app);
 
+//making websocket connection
+
+
+
+
 //prints a log once the server starts listening
 //change back to server.listen if needed
 server.listen(process.env.PORT || port, () => {
@@ -85,6 +93,8 @@ app.get('/api/clearDictionary', (req,res)=>{
   res.send("user's dictionary is cleared");
 });
 
+
+
 app.get("/api/guess",
 
 (req,res) => {
@@ -98,6 +108,11 @@ res.json(currentBoard);
 );
 
 
+app.get('/api/endgame',
+(req,res) => {currentBoard = undefined; res.json("Game over, board deleted");}
+
+)
+
 app.get('/api/endturn',
 
 (req,res) => {
@@ -108,7 +123,12 @@ app.get('/api/endturn',
 
 app.get('/',
 
-(req,res) => {res.json(currentBoard)}
+(req,res) => {
+
+  if (currentBoard === undefined) {console.log("board is empty, making new");currentBoard = newBoard();res.json(currentBoard); }
+  else{res.json(currentBoard)}
+
+}
 
 )
 
