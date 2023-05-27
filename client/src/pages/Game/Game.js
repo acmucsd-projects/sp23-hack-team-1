@@ -19,16 +19,19 @@ const Turns = {
  * @returns {void}
  */
 async function getCards(setCards) {
-    const response = await fetch("http://127.0.0.1:8001/api/newboard", {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            // custom word dictionary goes here ...
-        }),
-    });
+    const response = await fetch(
+        "https://codenames-acm.herokuapp.com/api/newboard",
+        {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // custom word dictionary goes here ...
+            }),
+        }
+    );
     const jsonData = await response.json();
     console.log(jsonData);
     setCards(jsonData.words);
@@ -38,7 +41,7 @@ function Game() {
     const [cells, setCells] = useState([]);
     const [playerGuess, setPlayerGuess] = useState(0);
 
-    const [currentWordGuess, setCurrentWordGuess] = useState("");
+    const [currentWordGuess, setCurrentWordGuess] = useState();
 
     const [turn, setTurn] = useState(Turns.RedSpy);
 
@@ -52,7 +55,7 @@ function Game() {
             return;
         } //doesn't change color because no more guesses
         const response = await fetch(
-            `http://127.0.0.1:8001/api/guess?index=${index}`
+            `https://codenames-acm.herokuapp.com/api/guess?index=${index}`
         );
         const jsonData = await response.json();
         console.log(jsonData);
@@ -79,7 +82,9 @@ function Game() {
             setTurn(Turns.RedGuess);
         } else {
             // call api
-            const response = await fetch(`http://127.0.0.1:8001/api/endturn`);
+            const response = await fetch(
+                `https://codenames-acm.herokuapp.com/api/endturn`
+            );
             const jsonData = await response.json();
             console.log(jsonData);
             setCells(jsonData.words);
@@ -93,9 +98,7 @@ function Game() {
 
     return (
         <div className="Game">
-            <MessageBox
-                playerTurn={turn}
-            />
+            <MessageBox playerTurn={turn} />
             {(turn === Turns.RedGuess || turn === Turns.BlueGuess) && (
                 <Counter
                     wordGuess={currentWordGuess}
@@ -109,15 +112,15 @@ function Game() {
                     changeTurn={handleTurnEnd}
                 />
             )}
-             <div className="cell-grid">
-            {cells.map((cell, index) => (
-                <WordCell
-                    cell={cell}
-                    key={`${cell.word}-${index}`}
-                    turn={turn}
-                    handleCardClick={handleCardClick}
-                />
-            ))}
+            <div className="cell-grid">
+                {cells.map((cell, index) => (
+                    <WordCell
+                        cell={cell}
+                        key={`${cell.word}-${index}`}
+                        turn={turn}
+                        handleCardClick={handleCardClick}
+                    />
+                ))}
             </div>
         </div>
     );
