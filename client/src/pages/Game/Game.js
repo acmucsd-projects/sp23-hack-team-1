@@ -1,22 +1,17 @@
 import { useState, useEffect } from "react";
 import WordCell from "../../components/Word Cell/WordCell";
-import "./Game.css";
 import Counter from "../../components/Counter/Counter";
 import SpyInput from "../../components/SpyInput/SpyInput";
 import MessageBox from "../../components/MessageBox/MessageBox";
 import WinScreen from "../../components/WinScreen/WinScreen";
+import { socket } from "../../socket";
+import "./Game.css";
 
 const Turns = {
     RedSpy: "Red Spy",
     BlueSpy: "Blue Spy",
     RedGuess: "Red Guess",
     BlueGuess: "Blue Guess",
-};
-
-const socket = new WebSocket("ws://codenames-acm.herokuapp.com:8001");
-
-socket.onmessage = ({ data }) => {
-    console.log("socket message: ", data);
 };
 
 /**
@@ -57,6 +52,11 @@ function Game() {
 
     useEffect(() => {
         getCards(setCells);
+        socket.on("updateBoard", (message) => {
+            if (message != null) {
+                setCells(message.words);
+            }
+        });
     }, []);
 
     async function handleCardClick(index) {
@@ -69,7 +69,6 @@ function Game() {
         );
         const jsonData = await response.json();
         console.log(jsonData);
-        console.log(socket.send("update"));
         if (jsonData === "blue has won! play again?") {
             setWinner("blue");
             const response = await fetch(
@@ -92,6 +91,7 @@ function Game() {
                 return;
             }
         }
+        socket.emit("update");
     }
 
     async function handleTurnEnd() {
@@ -113,6 +113,7 @@ function Game() {
                 setTurn(Turns.BlueSpy);
             }
         }
+        socket.emit("update");
     }
 
     return (
