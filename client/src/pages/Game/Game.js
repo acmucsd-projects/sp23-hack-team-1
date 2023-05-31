@@ -13,6 +13,12 @@ const Turns = {
     BlueGuess: "Blue Guess",
 };
 
+const socket = new WebSocket("ws://codenames-acm.herokuapp.com:8001");
+
+socket.onmessage = ({ data }) => {
+    console.log("socket message: ", data);
+};
+
 /**
  * Acquires a board of cards via the api.
  * @param {import("react").SetStateAction} setCards
@@ -80,12 +86,12 @@ function Game() {
         } else {
             setPlayerGuess((playerGuess) => playerGuess - 1);
             setCells(jsonData.words);
-            console.log(playerGuess);
             if (playerGuess - 1 <= 0) {
                 handleTurnEnd();
                 return;
             }
         }
+        socket.send("update");
     }
 
     async function handleTurnEnd() {
