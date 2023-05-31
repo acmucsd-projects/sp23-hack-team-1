@@ -69,6 +69,7 @@ function Game() {
         );
         const jsonData = await response.json();
         console.log(jsonData);
+        console.log(socket.send("update"));
         if (jsonData === "blue has won! play again?") {
             setWinner("blue");
             const response = await fetch(
@@ -91,7 +92,6 @@ function Game() {
                 return;
             }
         }
-        socket.send("update");
     }
 
     async function handleTurnEnd() {
