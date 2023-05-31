@@ -18,6 +18,7 @@ const cors = require("cors");
 //const usersRouter = require('./routes/users');
 const Board = require('./Board');
 const { application } = require("express");
+const { Socket } = require("dgram");
 
 let currentBoard;
 
@@ -56,9 +57,21 @@ mongoose.connect(process.env.DB_URL, {
 const server = http.createServer(app);
 
 //making websocket connection
+let websocket = require('socket.io')(server,
+  {cors: {origin: "*"}}
+  );
 
+websocket.on('connection',
+(socket) => {console.log("user connected to websockets");
+ socket.on("update", (message) =>{
+  console.log("update received from user");
+  websocket.emit("updateBoard",currentBoard)})
 
+} //end of connection event
 
+) //end of websocket
+
+//what port is it listening on?
 
 //prints a log once the server starts listening
 //change back to server.listen if needed
