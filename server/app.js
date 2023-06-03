@@ -26,7 +26,7 @@ let currentBoard;
 const newBoard = Board.newBoard;
 const endTurn = Board.endTurn;
 const guessWord = Board.guessWord;
-
+const selectWord = Board.selectWord;
 
 const app = express();
 
@@ -117,6 +117,18 @@ app.get("/api/guess",
 
 let b = guessWord(req.query.index,currentBoard);
 currentBoard = b;
+res.json(currentBoard);
+
+}
+
+);
+
+
+app.get("/api/selectword",
+
+(req,res) => {
+let c = selectWord(req.query.currentWordGuess,req.query.playerGuess,currentBoard);
+currentBoard = c;
 res.json(currentBoard);
 
 }

@@ -4,7 +4,7 @@ const objectArray = require("./wordGenerator");
 let userDictionary = [];
 
 
-let Board = function(redScore,blueScore,turn,words){
+let Board = function(redScore,blueScore,turn,words,playerGuess = null, currentWordGuess = null){
 
 /*
 This function represents the current state of the board. it keeps track of the words remaining for red & blue (ints),
@@ -15,6 +15,8 @@ this.redScore = redScore;
 this.blueScore = blueScore;
 this.turn = turn;
 this.words = words;
+this.playerGuess = playerGuess;
+this.currentWordGuess = currentWordGuess;
 
 
 this.printBoard = () => {console.log(this)};
@@ -27,9 +29,9 @@ function newBoard(){
     
     if(userDictionary.length>=25){
         console.log("we triggered custom board")
-        newboard = new Board(9,8,"red",createObjectArray(userDictionary));
+        newboard = new Board(9,8,"Red Spy",createObjectArray(userDictionary));
     }else{
-        newboard = new Board(9,8,"red",createObjectArray())
+        newboard = new Board(9,8,"Red Spy",createObjectArray())
     }
     return newboard;
 }
@@ -50,8 +52,10 @@ function clearDictionary(){
 
 //changes the current team's turn to pick words
 function endTurn(board){
-if (board.turn === "red") {board.turn = "blue"}
-else if (board.turn == "blue"){board.turn = "red"}
+if (board.turn === "Red Spy") {board.turn = "Red Guess"}
+else if (board.turn === "Red Guess"){board.turn = "Blue Spy"}
+else if (board.turn === "Blue Spy") {board.turn = "Blue Guess"}
+else if (board.turn === "Blue Guess") {board.turn = "Red Spy"}
 else {board.turn = "Something weird happened, check the request"};
 return board;
 
@@ -83,23 +87,39 @@ function guessWord(index1,sampleBoard) {
 
         if (word.type === "black") {
             team = sampleBoard.turn === 'red' ? 'blue' : 'red';
+            word.status = "click";
+            sampleBoard.playerGuess = sampleBoard.playerGuess - 1;
+
+            //dont need to do if (sampleBoard.playerGuess <= 0) {return endTurn(sampleBoard);};
+
             return endGame(team);
         }
 
         else if (word.type === "white") {
             word.status = "click";
-            
+            sampleBoard.playerGuess = sampleBoard.playerGuess - 1;
+
+            if (sampleBoard.playerGuess <= 0) {return endTurn(sampleBoard);};
         }
 
         else if (word.type === "blue") {
             word.status = "click";
             sampleBoard.blueScore -= 1;
+            sampleBoard.playerGuess = sampleBoard.playerGuess - 1;
             if (sampleBoard.blueScore <= 0){return endGame("blue");};
+
+            if (sampleBoard.playerGuess <= 0) {return endTurn(sampleBoard);};
+
+
         }
         else if (word.type === "red") {
             word.status = "click";
             sampleBoard.redScore -= 1;
+            sampleBoard.playerGuess = sampleBoard.playerGuess - 1;
             if (sampleBoard.redScore <= 0){return endGame("red");};
+            
+            
+            if (sampleBoard.playerGuess <= 0) {return endTurn(sampleBoard);};
         }
 
     }
@@ -109,7 +129,12 @@ function guessWord(index1,sampleBoard) {
 }
 
 
-
+//Function For Spymasters to select word
+function selectWord(word1,numGuesses,sampleBoard){
+    sampleBoard.playerGuess = numGuesses;
+    sampleBoard.currentWordGuess = word1;
+    return endTurn(sampleBoard);
+}
 
 
 //module.exports = newBoard;
@@ -118,6 +143,7 @@ module.exports = {
     newBoard,
     clearDictionary,
     guessWord,
+    selectWord,
     endTurn
   };
 
