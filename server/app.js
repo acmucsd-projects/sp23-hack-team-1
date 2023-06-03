@@ -66,7 +66,8 @@ app.post("/api/newboard", (req, res) => {
     }
     //if user did input their own dictionary and it has enough word to turn it into dictionary
     else if (req.body.customizedDict.length >= 25) {
-        res.json(Board.customizeNewBoard(req.body.customizedDict));
+        currentBoard = Board.customizeNewBoard(req.body.customizedDict);
+        res.json(currentBoard);
     }
     //report an error message if words is not enough
     else {
@@ -78,6 +79,12 @@ app.get("/api/clearDictionary", (req, res) => {
     Board.clearDictionary();
     res.send("user's dictionary is cleared");
 });
+
+app.get("/api/checkHints", (req, res)=>{
+    const hint = req.query.hint;
+    const isMatch = Board.checkMatch(currentBoard, hint);
+    res.json(isMatch);
+})
 
 app.get(
     "/api/guess",
@@ -96,5 +103,7 @@ app.get(
         res.json(endTurn(currentBoard));
     }
 );
+
+
 
 module.exports = app;

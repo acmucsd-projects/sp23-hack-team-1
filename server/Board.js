@@ -51,10 +51,35 @@ function endTurn(board) {
     return board;
 }
 
-function endGame(team) {
-    return team + " has won! play again?";
+function endGame(curBoard, team) {
+    curBoard.winner = team;
+    return curBoard;
     //do more here later
 }
+
+function checkMatch(source, hint) {
+    if(source === undefined || source.words === undefined){
+        return false; 
+    }
+    var pattern = /^[a-zA-Z]+$/;
+    if (pattern.test(hint)===false) return false; 
+    for (let i = 0; i < source.words.length; i++) {
+      const word = source.words[i].word;
+      if (word === hint) {
+        return false;
+      }
+      if (hint.length >= 5) {
+        for (let j = 0; j <= word.length - 5; j++) {
+          const substring = word.substring(j, j + 5);
+          if (hint.includes(substring)) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+  
 
 //index is an int
 function guessWord(index1, sampleBoard) {
@@ -76,20 +101,20 @@ function guessWord(index1, sampleBoard) {
 
         if (word.type === "black") {
             team = sampleBoard.turn === "red" ? "blue" : "red";
-            return endGame(team);
+            return endGame(sampleBoard, team);
         } else if (word.type === "white") {
             word.status = "click";
         } else if (word.type === "blue") {
             word.status = "click";
             sampleBoard.blueScore -= 1;
             if (sampleBoard.blueScore <= 0) {
-                return endGame("blue");
+                return endGame(sampleBoard, "blue");
             }
         } else if (word.type === "red") {
             word.status = "click";
             sampleBoard.redScore -= 1;
             if (sampleBoard.redScore <= 0) {
-                return endGame("red");
+                return endGame(sampleBoard, "red");
             }
         }
     } else {
@@ -110,4 +135,5 @@ module.exports = {
     clearDictionary,
     guessWord,
     endTurn,
+    checkMatch,
 };
