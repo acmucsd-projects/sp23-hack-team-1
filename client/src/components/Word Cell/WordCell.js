@@ -8,6 +8,12 @@ function WordCell({ cell, turn, handleCardClick, role }) {
         ["white", "#faf0e6"],
         ["black", "#949494"],
     ]);
+    const colorDictDarker = new Map([
+        ["red", "#ad635e"],
+        ["blue", "#53778e"],
+        ["white", "#b09c87"],
+        ["black", "#949494"],
+    ]);
 
     if (turn === Turns.RedGuess || turn === Turns.BlueGuess) {
         if (cell.status === "unclick") {
@@ -44,13 +50,23 @@ function WordCell({ cell, turn, handleCardClick, role }) {
             );
         }
     } else {
-        return (
-            <div
-                className="cell"
-                style={{ backgroundColor: colorDict.get(cell.type) }}>
-                <p>{cell.word}</p>
-            </div>
-        );
+        if (cell.status === "unclick") {
+            return (
+                <div
+                    className="cell"
+                    style={{ backgroundColor: colorDict.get(cell.type) }}>
+                    <p>{cell.word}</p>
+                </div>
+            );
+        } else {
+            return (
+                <div
+                    className="cell"
+                    style={{ backgroundColor: colorDictDarker.get(cell.type) }}>
+                    <p>{cell.word}</p>
+                </div>
+            );
+        }
     }
 }
 export default WordCell;
