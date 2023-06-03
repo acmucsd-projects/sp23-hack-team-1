@@ -56,7 +56,6 @@ async function getCards(gameState, customWords) {
     const jsonData = await response.json();
     console.log(jsonData);
     socket.emit("update");
-
 }
 
 function Game({ gameState, customWords, role }) {
@@ -77,16 +76,18 @@ function Game({ gameState, customWords, role }) {
                 setCurrentWordGuess(message.currentWordGuess);
                 setTurn(message.turn);
                 setCells(message.words);
-                setWinner(message.winner)
+                setWinner(message.winner);
             }
         });
     }, []);
 
     async function handleCardClick(index) {
-        await fetch(
-            `https://codenames-acm.herokuapp.com/api/guess?index=${index}`
-        )
-        socket.emit("update");
+        if (playerGuess > 0) {
+            await fetch(
+                `https://codenames-acm.herokuapp.com/api/guess?index=${index}`
+            );
+            socket.emit("update");
+        }
     }
 
     async function handleSpyInput(word, amount) {
@@ -98,8 +99,7 @@ function Game({ gameState, customWords, role }) {
 
     return (
         <div className="Game">
-            {(winner !== "" && winner !== null) && 
-                <WinScreen winner={winner} />}
+            {winner !== "" && winner !== null && <WinScreen winner={winner} />}
             <MessageBox playerTurn={turn} />
             {(turn === Turns.RedGuess || turn === Turns.BlueGuess) && (
                 <Counter
