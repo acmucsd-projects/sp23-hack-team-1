@@ -55,6 +55,8 @@ async function getCards(gameState, customWords) {
     }
     const jsonData = await response.json();
     console.log(jsonData);
+    socket.emit("update");
+
 }
 
 function Game({ gameState, customWords, role }) {
@@ -75,32 +77,15 @@ function Game({ gameState, customWords, role }) {
                 setCurrentWordGuess(message.currentWordGuess);
                 setTurn(message.turn);
                 setCells(message.words);
+                setWinner(message.winner)
             }
         });
-        socket.emit("update");
     }, []);
 
     async function handleCardClick(index) {
-        const response = await fetch(
+        await fetch(
             `https://codenames-acm.herokuapp.com/api/guess?index=${index}`
-        );
-        const jsonData = await response.json();
-        console.log(jsonData);
-        if (jsonData === "blue has won! play again?") {
-            setWinner("blue");
-            const response = await fetch(
-                `https://codenames-acm.herokuapp.com/api/endgame`
-            );
-            const jsonData = await response.json();
-            console.log(jsonData);
-        } else if (jsonData === "red has won! play again?") {
-            setWinner("red");
-            const response = await fetch(
-                `https://codenames-acm.herokuapp.com/api/endgame`
-            );
-            const jsonData = await response.json();
-            console.log(jsonData);
-        }
+        )
         socket.emit("update");
     }
 
@@ -113,7 +98,8 @@ function Game({ gameState, customWords, role }) {
 
     return (
         <div className="Game">
-            {winner !== "" && <WinScreen winner={winner} />}
+            {(winner !== "" && winner !== null) && 
+                <WinScreen winner={winner} />}
             <MessageBox playerTurn={turn} />
             {(turn === Turns.RedGuess || turn === Turns.BlueGuess) && (
                 <Counter
