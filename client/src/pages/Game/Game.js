@@ -22,6 +22,7 @@ const Turns = {
  */
 async function getCards(gameState, customWords) {
     let response;
+    console.log(gameState);
     if (gameState === "new-userinput") {
         response = await fetch(
             "https://codenames-acm.herokuapp.com/api/newboard",
@@ -56,7 +57,7 @@ async function getCards(gameState, customWords) {
     console.log(jsonData);
 }
 
-function Game({ gameState, customWords }) {
+function Game({ gameState, customWords, role }) {
     const [cells, setCells] = useState([]);
     const [playerGuess, setPlayerGuess] = useState(0);
 
@@ -67,7 +68,7 @@ function Game({ gameState, customWords }) {
     const [winner, setWinner] = useState("");
 
     useEffect(() => {
-        getCards(setCells, gameState, customWords);
+        getCards(gameState, customWords);
         socket.on("updateBoard", (message) => {
             if (message != null) {
                 setPlayerGuess(message.playerGuess);
@@ -120,7 +121,9 @@ function Game({ gameState, customWords }) {
                     guessAmount={playerGuess}
                 />
             )}
-            {(turn === Turns.BlueSpy || turn === Turns.RedSpy) && (
+            {(turn === Turns.BlueSpy ||
+                (turn === Turns.RedSpy &&
+                    !(role === "Red Guesser" || role === "Blue Guesser"))) && (
                 <SpyInput handleSpyInput={handleSpyInput} />
             )}
             <div className="cell-grid">
@@ -130,6 +133,7 @@ function Game({ gameState, customWords }) {
                         key={`${cell.word}-${index}`}
                         turn={turn}
                         handleCardClick={handleCardClick}
+                        role={role}
                     />
                 ))}
             </div>

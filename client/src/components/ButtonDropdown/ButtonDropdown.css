@@ -1,0 +1,45 @@
+/* ButtonDropdown.css */
+
+.dropdown-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 15rem;
+    border-radius: 5px;
+    padding: 1rem;
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
+}
+
+.dropdown-button {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    background-color: transparent;
+}
+
+.dropdown-button:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+.red-team {
+    color: #dc3545;
+}
+
+.red-team:hover {
+    color: #b02a37;
+}
+
+.blue-team {
+    color: #007bff;
+}
+
+.blue-team:hover {
+    color: #0056b3;
+}

@@ -1,31 +1,39 @@
 import { useState } from "react";
 import "./StartMenu.css";
+import ButtonDropdown from "../../components/ButtonDropdown/ButtonDropdown";
 
-function StartMenu({ setGameState, setCustomWords }) {
+function StartMenu({ setGameState, setCustomWords, setRole }) {
     const [wordBank, setWordBank] = useState("");
     const [wordBankError, setWordBankError] = useState(false);
+
+    const [userSelection, setUserSelection] = useState(null);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const handleUserInput = (e) => {
         setWordBank(e.target.value);
     };
 
-    const handleUserInputButtonClick = () => {
-        const words = wordBank.split(",");
-        if (words.length !== 25) {
-            setWordBankError(true);
-            return;
+    const handleUserInputButtonClick = (userSelection) => {
+        if (userSelection === "new-userinput") {
+            const words = wordBank.split(",");
+            if (words.length !== 25) {
+                setWordBankError(true);
+                return;
+            }
+            setWordBankError(false);
+            setCustomWords(words);
+            setUserSelection("new-userinput");
+        } else if (userSelection === "new-random") {
+            setUserSelection("new-random");
+        } else {
+            setUserSelection("existing");
         }
-        setWordBankError(false);
-        setCustomWords(words);
-        setGameState("new-userinput");
+        setIsDropdownOpen(!isDropdownOpen);
     };
 
-    const handleRandomClick = () => {
-        setGameState("new-random");
-    };
-
-    const handleExistingClick = () => {
-        setGameState("existing");
+    const handleOptionClick = (option) => {
+        setRole(option);
+        setGameState(userSelection);
     };
 
     return (
@@ -43,15 +51,34 @@ function StartMenu({ setGameState, setCustomWords }) {
             )}
             <button
                 className="UserInputButton"
-                onClick={handleUserInputButtonClick}>
+                onClick={() => {
+                    handleUserInputButtonClick("new-userinput");
+                }}>
                 Input your own
             </button>
-            <button className="Random" onClick={handleRandomClick}>
+            {userSelection === "new-userinput" && isDropdownOpen && (
+                <ButtonDropdown handleOptionClick={handleOptionClick} />
+            )}
+            <button
+                className="Random"
+                onClick={() => {
+                    handleUserInputButtonClick("new-random");
+                }}>
                 Random Words
             </button>
-            <button className="existing" onClick={handleExistingClick}>
+            {userSelection === "new-random" && isDropdownOpen && (
+                <ButtonDropdown handleOptionClick={handleOptionClick} />
+            )}
+            <button
+                className="existing"
+                onClick={() => {
+                    handleUserInputButtonClick("existing");
+                }}>
                 Join Existing
             </button>
+            {userSelection === "existing" && isDropdownOpen && (
+                <ButtonDropdown handleOptionClick={handleOptionClick} />
+            )}
         </div>
     );
 }
