@@ -53,7 +53,6 @@ async function getCards(setCards, gameState, customWords) {
         response = await fetch("https://codenames-acm.herokuapp.com/");
     }
     const jsonData = await response.json();
-    console.log(jsonData);
     setCards(jsonData.words);
 }
 
@@ -70,6 +69,7 @@ function Game({ gameState, customWords }) {
     useEffect(() => {
         getCards(setCells, gameState, customWords);
         socket.on("updateBoard", (message) => {
+            console.log(message);
             if (message != null) {
                 setCells(message.words);
             }
@@ -85,21 +85,13 @@ function Game({ gameState, customWords }) {
             `https://codenames-acm.herokuapp.com/api/guess?index=${index}`
         );
         const jsonData = await response.json();
-        console.log(jsonData);
+        // console.log(jsonData);
         if (jsonData === "blue has won! play again?") {
             setWinner("blue");
-            const response = await fetch(
-                `https://codenames-acm.herokuapp.com/api/endgame`
-            );
-            const jsonData = await response.json();
-            console.log(jsonData);
+            // await fetch(`https://codenames-acm.herokuapp.com/api/endgame`);
         } else if (jsonData === "red has won! play again?") {
             setWinner("red");
-            const response = await fetch(
-                `https://codenames-acm.herokuapp.com/api/endgame`
-            );
-            const jsonData = await response.json();
-            console.log(jsonData);
+            // await fetch(`https://codenames-acm.herokuapp.com/api/endgame`);
         } else {
             setPlayerGuess((playerGuess) => playerGuess - 1);
             setCells(jsonData.words);
@@ -122,7 +114,6 @@ function Game({ gameState, customWords }) {
                 `https://codenames-acm.herokuapp.com/api/endturn`
             );
             const jsonData = await response.json();
-            console.log(jsonData);
             setCells(jsonData.words);
             if (turn === Turns.BlueGuess) {
                 setTurn(Turns.RedSpy);
