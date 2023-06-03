@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import WordCell from "../../components/Word Cell/WordCell";
-import "./Game.css";
 import Counter from "../../components/Counter/Counter";
 import SpyInput from "../../components/SpyInput/SpyInput";
 import MessageBox from "../../components/MessageBox/MessageBox";
 import WinScreen from "../../components/WinScreen/WinScreen";
+import { socket } from "../../socket";
+import "./Game.css";
 
 const Turns = {
     RedSpy: "Red Spy",
@@ -68,6 +69,11 @@ function Game({ gameState, customWords }) {
 
     useEffect(() => {
         getCards(setCells, gameState, customWords);
+        socket.on("updateBoard", (message) => {
+            if (message != null) {
+                setCells(message.words);
+            }
+        });
     }, []);
 
     async function handleCardClick(index) {
@@ -97,12 +103,12 @@ function Game({ gameState, customWords }) {
         } else {
             setPlayerGuess((playerGuess) => playerGuess - 1);
             setCells(jsonData.words);
-            console.log(playerGuess);
             if (playerGuess - 1 <= 0) {
                 handleTurnEnd();
                 return;
             }
         }
+        socket.emit("update");
     }
 
     async function handleTurnEnd() {
@@ -124,6 +130,7 @@ function Game({ gameState, customWords }) {
                 setTurn(Turns.BlueSpy);
             }
         }
+        socket.emit("update");
     }
 
     return (
