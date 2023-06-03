@@ -19,27 +19,44 @@ const Turns = {
  * setCards: a function of which to set the state of with the cards obtained from the api.
  * @returns {void}
  */
-async function getCards(setCards) {
-    // const response = await fetch(
-    //     "https://codenames-acm.herokuapp.com/api/newboard",
-    //     {
-    //         method: "POST",
-    //         headers: {
-    //             Accept: "application/json",
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify({
-    //             // custom word dictionary goes here ...
-    //         }),
-    //     }
-    // );
-    const response = await fetch("https://codenames-acm.herokuapp.com/");
+async function getCards(setCards, gameState, customWords) {
+    let response;
+    if (gameState === "new-userinput") {
+        response = await fetch(
+            "https://codenames-acm.herokuapp.com/api/newboard",
+            {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    // custom word dictionary goes here ...
+                    customizedDict: customWords,
+                }),
+            }
+        );
+    } else if (gameState === "new-random") {
+        await fetch("https://codenames-acm.herokuapp.com/api/clearDictionary");
+        response = await fetch(
+            "https://codenames-acm.herokuapp.com/api/newboard",
+            {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+    } else {
+        response = await fetch("https://codenames-acm.herokuapp.com/");
+    }
     const jsonData = await response.json();
     console.log(jsonData);
     setCards(jsonData.words);
 }
 
-function Game() {
+function Game({ gameState, customWords }) {
     const [cells, setCells] = useState([]);
     const [playerGuess, setPlayerGuess] = useState(0);
 
@@ -50,7 +67,7 @@ function Game() {
     const [winner, setWinner] = useState("");
 
     useEffect(() => {
-        getCards(setCells);
+        getCards(setCells, gameState, customWords);
     }, []);
 
     async function handleCardClick(index) {
