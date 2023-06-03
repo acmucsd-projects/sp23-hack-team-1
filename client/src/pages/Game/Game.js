@@ -20,7 +20,7 @@ const Turns = {
  * setCards: a function of which to set the state of with the cards obtained from the api.
  * @returns {void}
  */
-async function getCards(setCards, gameState, customWords) {
+async function getCards(gameState, customWords) {
     let response;
     if (gameState === "new-userinput") {
         response = await fetch(
@@ -54,7 +54,6 @@ async function getCards(setCards, gameState, customWords) {
     }
     const jsonData = await response.json();
     console.log(jsonData);
-    setCards(jsonData.words);
 }
 
 function Game({ gameState, customWords }) {
@@ -71,16 +70,16 @@ function Game({ gameState, customWords }) {
         getCards(setCells, gameState, customWords);
         socket.on("updateBoard", (message) => {
             if (message != null) {
+                setPlayerGuess(message.playerGuess);
+                setCurrentWordGuess(message.currentWordGuess);
+                setTurn(message.turn);
                 setCells(message.words);
             }
         });
+        socket.emit("update");
     }, []);
 
     async function handleCardClick(index) {
-        if (playerGuess <= 0) {
-            handleTurnEnd();
-            return;
-        } //doesn't change color because no more guesses
         const response = await fetch(
             `https://codenames-acm.herokuapp.com/api/guess?index=${index}`
         );
@@ -100,36 +99,14 @@ function Game({ gameState, customWords }) {
             );
             const jsonData = await response.json();
             console.log(jsonData);
-        } else {
-            setPlayerGuess((playerGuess) => playerGuess - 1);
-            setCells(jsonData.words);
-            if (playerGuess - 1 <= 0) {
-                handleTurnEnd();
-                return;
-            }
         }
         socket.emit("update");
     }
 
-    async function handleTurnEnd() {
-        if (turn === Turns.BlueSpy) {
-            setTurn(Turns.BlueGuess);
-        } else if (turn === Turns.RedSpy) {
-            setTurn(Turns.RedGuess);
-        } else {
-            // call api
-            const response = await fetch(
-                `https://codenames-acm.herokuapp.com/api/endturn`
-            );
-            const jsonData = await response.json();
-            console.log(jsonData);
-            setCells(jsonData.words);
-            if (turn === Turns.BlueGuess) {
-                setTurn(Turns.RedSpy);
-            } else {
-                setTurn(Turns.BlueSpy);
-            }
-        }
+    async function handleSpyInput(word, amount) {
+        await fetch(
+            `https://codenames-acm.herokuapp.com/api/selectword?currentWordGuess=${word}&playerGuess=${amount}`
+        );
         socket.emit("update");
     }
 
@@ -144,11 +121,7 @@ function Game({ gameState, customWords }) {
                 />
             )}
             {(turn === Turns.BlueSpy || turn === Turns.RedSpy) && (
-                <SpyInput
-                    setGuessesLeft={setPlayerGuess}
-                    setCurrentWordGuess={setCurrentWordGuess}
-                    changeTurn={handleTurnEnd}
-                />
+                <SpyInput handleSpyInput={handleSpyInput} />
             )}
             <div className="cell-grid">
                 {cells.map((cell, index) => (
