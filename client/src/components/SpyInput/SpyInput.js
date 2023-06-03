@@ -1,24 +1,30 @@
+import { useState } from "react";
 import "./SpyInput.css";
 
-function SpyInput({ setGuessesLeft, setCurrentWordGuess, changeTurn }) {
+function SpyInput({ handleSpyInput }) {
+    const [currentWord, setCurrentWord] = useState("");
+    const [guessAmount, setGuessAmount] = useState(0);
+
     return (
         <div className="spy">
             <div>Word:</div>
             <input
                 className="spy-word"
                 type="text"
-                onChange={(e) => setCurrentWordGuess(e.target.value)}
+                onChange={(e) => setCurrentWord(e.target.value)}
+                value={currentWord}
             />
             <div>Amount:</div>
             <input
                 className="spy-amount"
                 type="number"
-                onChange={(e) => setGuessesLeft(e.target.value)}
+                onChange={(e) => setGuessAmount(e.target.value)}
+                value={guessAmount}
             />
             <button
                 type="button"
                 className="submit-button"
-                onClick={() => changeTurn()}>
+                onClick={() => handleSpyInput(currentWord, guessAmount)}>
                 Submit
             </button>
         </div>
