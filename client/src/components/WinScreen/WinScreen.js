@@ -15,7 +15,7 @@ function WinScreen({ winner }) {
     if (!visible) {
         return null;
     }
-    if (winner === "Red") {
+    if (winner === "red") {
         return (
             <div className="win-screen-overlay">
                 <div className="win-screen-content">Red has won!</div>
