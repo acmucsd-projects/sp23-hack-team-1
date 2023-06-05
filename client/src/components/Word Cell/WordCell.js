@@ -1,7 +1,7 @@
 import "./WordCell.css";
 import { Turns } from "../../pages/Game/Game";
 
-function WordCell({ cell, turn, handleCardClick, role }) {
+function WordCell({ cell, turn, handleCardClick, role, winner }) {
     const colorDict = new Map([
         ["red", "#ff948c"],
         ["blue", "#68b5e8"],
@@ -14,42 +14,48 @@ function WordCell({ cell, turn, handleCardClick, role }) {
         ["white", "#b09c87"],
         ["black", "#949494"],
     ]);
-
-    if (turn === Turns.RedGuess || turn === Turns.BlueGuess) {
-        if (cell.status === "unclick") {
-            return (
-                <div
-                    className="cell"
-                    onClick={() => handleCardClick(cell.index)}>
-                    <p>{cell.word}</p>
-                </div>
-            );
+    if (
+        (role === "Red Guesser" || role === "Blue Guesser") &&
+        winner !== "red" &&
+        winner !== "Blue"
+    ) {
+        if (turn === Turns.RedGuess || turn === Turns.BlueGuess) {
+            if (cell.status === "unclick") {
+                return (
+                    <div
+                        className="cell"
+                        onClick={() => handleCardClick(cell.index)}>
+                        <p>{cell.word}</p>
+                    </div>
+                );
+            } else {
+                return (
+                    <div
+                        className="cell"
+                        style={{ backgroundColor: colorDict.get(cell.type) }}>
+                        <p>{cell.word}</p>
+                    </div>
+                );
+            }
         } else {
-            return (
-                <div
-                    className="cell"
-                    style={{ backgroundColor: colorDict.get(cell.type) }}>
-                    <p>{cell.word}</p>
-                </div>
-            );
-        }
-    } else if (role === "Red Guesser" || role === "Blue Guesser") {
-        if (cell.status === "unclick") {
-            return (
-                <div className="cell">
-                    <p>{cell.word}</p>
-                </div>
-            );
-        } else {
-            return (
-                <div
-                    className="cell"
-                    style={{ backgroundColor: colorDict.get(cell.type) }}>
-                    <p>{cell.word}</p>
-                </div>
-            );
+            if (cell.status === "unclick") {
+                return (
+                    <div className="cell">
+                        <p>{cell.word}</p>
+                    </div>
+                );
+            } else {
+                return (
+                    <div
+                        className="cell"
+                        style={{ backgroundColor: colorDict.get(cell.type) }}>
+                        <p>{cell.word}</p>
+                    </div>
+                );
+            }
         }
     } else {
+        // if here, rendering cells for spy
         if (cell.status === "unclick") {
             return (
                 <div

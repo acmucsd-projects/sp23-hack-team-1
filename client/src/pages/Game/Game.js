@@ -106,11 +106,10 @@ function Game({ gameState, customWords, role }) {
                     guessAmount={playerGuess}
                 />
             )}
-            {(turn === Turns.BlueSpy ||
-                (turn === Turns.RedSpy &&
-                    !(role === "Red Guesser" || role === "Blue Guesser"))) && (
-                <SpyInput handleSpyInput={handleSpyInput} />
-            )}
+            {(turn === Turns.BlueSpy && role === "Blue Spy") ||
+                (turn === Turns.RedSpy && role === "Red Spy" && (
+                    <SpyInput handleSpyInput={handleSpyInput} />
+                ))}
             <div className="cell-grid">
                 {cells.map((cell, index) => (
                     <WordCell
@@ -119,6 +118,7 @@ function Game({ gameState, customWords, role }) {
                         turn={turn}
                         handleCardClick={handleCardClick}
                         role={role}
+                        winner={winner}
                     />
                 ))}
             </div>
