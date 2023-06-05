@@ -15,28 +15,21 @@ function WinScreen({ winner }) {
     if (!visible) {
         return null;
     }
-    if(winner === "red"){
+    if (winner === "Red") {
         return (
             <div className="win-screen-overlay">
-                <div className="win-screen-content">
-                    Red has won!
-                </div>
+                <div className="win-screen-content">Red has won!</div>
             </div>
         );
-    }
-    else if (winner === "blue"){
+    } else if (winner === "Blue") {
         return (
             <div className="win-screen-overlay">
-                <div className="win-screen-content">
-                    Blue has won!
-                </div>
+                <div className="win-screen-content">Blue has won!</div>
             </div>
         );
+    } else {
+        return <div></div>;
     }
-    else{
-        return <div></div>
-    }
-    
 }
 
 export default WinScreen;

@@ -22,7 +22,6 @@ const Turns = {
  */
 async function getCards(gameState, customWords) {
     let response;
-    console.log(gameState);
     if (gameState === "new-userinput") {
         response = await fetch(
             "https://codenames-acm.herokuapp.com/api/newboard",
@@ -53,8 +52,7 @@ async function getCards(gameState, customWords) {
     } else {
         response = await fetch("https://codenames-acm.herokuapp.com/");
     }
-    const jsonData = await response.json();
-    console.log(jsonData);
+    await response.json();
     socket.emit("update");
 }
 
@@ -78,6 +76,7 @@ function Game({ gameState, customWords, role }) {
                 setCells(message.words);
                 setWinner(message.winner);
             }
+            console.log(message);
         });
     }, []);
 
