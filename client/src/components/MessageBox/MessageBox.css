@@ -1,3 +1,10 @@
+.position-box {
+    position: fixed;
+    left: 50%;
+    top: 10%;
+    transform: translate(-50%, -50%);
+}
+
 .red-message-box {
     color: #ff7272;
     /* border-color: #ff7272; */
@@ -10,12 +17,9 @@
     align-items: center;
     justify-content: center;
     size: 100px;
-    margin-bottom: 10px;
-    position: fixed;
-    left: 50%;
-    top: 10%;
-    transform: translate(-50%, -50%);
     font-size: 40px;
+    padding-left: 7px;
+    padding-right: 7px;
 }
 
 .blue-message-box {
@@ -31,9 +35,5 @@
     justify-content: center;
     size: 100px;
     margin-bottom: 10px;
-    position: fixed;
-    left: 50%;
-    top: 10%;
-    transform: translate(-50%, -50%);
     font-size: 40px;
 }

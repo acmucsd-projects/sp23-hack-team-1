@@ -1,9 +1,25 @@
+import LoadingSymbol from "../LoadingSymbol/LoadingSymbol";
 import "./MessageBox.css";
 
-function MessageBox({ playerTurn }) {
-    if (playerTurn[0] === "R")
-        return <div className="red-message-box">{playerTurn}</div>;
-    else return <div className="blue-message-box">{playerTurn}</div>;
+function MessageBox({ playerTurn, role }) {
+    return (
+        <div className="position-box">
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "right",
+                }}>
+                <div
+                    className={`${
+                        playerTurn[0] === "R" ? "red" : "blue"
+                    }-message-box`}>
+                    {playerTurn}'s Turn
+                </div>
+                {playerTurn !== role && <LoadingSymbol />}
+            </div>
+        </div>
+    );
 }
 
 export default MessageBox;
