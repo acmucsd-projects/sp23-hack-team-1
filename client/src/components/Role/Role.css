@@ -1,0 +1,29 @@
+.role-box {
+    position: fixed;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    left: 50%;
+    top: 90%;
+    height: 60px;
+    transform: translate(-50%, -50%);
+    background-color: #ff7272;
+    border-color: #686868;
+    border-width: 0.5rem;
+    border-style: solid;
+    border-radius: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+}
+
+.red {
+    background-color: #ff7272;
+}
+
+.blue {
+    background-color: #7da8ff;
+}

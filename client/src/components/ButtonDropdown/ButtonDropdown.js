@@ -12,7 +12,7 @@ function ButtonDropdown({ handleOptionClick }) {
             </button>
             <button
                 className="dropdown-button red-team"
-                onClick={() => handleOptionClick("Red Guesser")}>
+                onClick={() => handleOptionClick("Red Guess")}>
                 Red Guesser
             </button>
             <button
@@ -22,7 +22,7 @@ function ButtonDropdown({ handleOptionClick }) {
             </button>
             <button
                 className="dropdown-button blue-team"
-                onClick={() => handleOptionClick("Blue Guesser")}>
+                onClick={() => handleOptionClick("Blue Guess")}>
                 Blue Guesser
             </button>
         </div>

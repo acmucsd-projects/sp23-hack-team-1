@@ -15,11 +15,14 @@ function WordCell({ cell, turn, handleCardClick, role, winner }) {
         ["black", "#949494"],
     ]);
     if (
-        (role === "Red Guesser" || role === "Blue Guesser") &&
+        (role === "Red Guess" || role === "Blue Guess") &&
         winner !== "red" &&
         winner !== "Blue"
     ) {
-        if (turn === Turns.RedGuess || turn === Turns.BlueGuess) {
+        if (
+            (turn === Turns.RedGuess || turn === Turns.BlueGuess) &&
+            role === turn
+        ) {
             if (cell.status === "unclick") {
                 return (
                     <div

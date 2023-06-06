@@ -1,6 +1,20 @@
+.position-box {
+    position: fixed;
+    left: 50%;
+    top: 3%;
+    transform: translate(-50%, -10%);
+}
+
+.message-box-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    text-align: center;
+}
+
 .red-message-box {
     color: #ff7272;
-    /* border-color: #ff7272; */
     width: 300px;
     height: 70px;
     background-color: #ffffff;
@@ -9,18 +23,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    size: 100px;
-    margin-bottom: 10px;
-    position: fixed;
-    left: 50%;
-    top: 10%;
-    transform: translate(-50%, -50%);
-    font-size: 40px;
+    font-size: 35px;
+    text-align: center;
+    padding: 0 7px;
+    margin-right: 10px;
 }
 
 .blue-message-box {
     color: #72c2ff;
-    /* border-color: #ff7272; */
     width: 300px;
     height: 70px;
     background-color: #ffffff;
@@ -29,11 +39,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    size: 100px;
+    font-size: 35px;
+    text-align: center;
     margin-bottom: 10px;
-    position: fixed;
-    left: 50%;
-    top: 10%;
-    transform: translate(-50%, -50%);
-    font-size: 40px;
+}
+
+.loading-symbol {
+    display: inline-block;
+    margin-left: 10px;
 }
