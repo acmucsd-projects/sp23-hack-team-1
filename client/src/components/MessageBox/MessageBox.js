@@ -4,12 +4,7 @@ import "./MessageBox.css";
 function MessageBox({ playerTurn, role }) {
     return (
         <div className="position-box">
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "right",
-                }}>
+            <div className="message-box-container">
                 <div
                     className={`${
                         playerTurn[0] === "R" ? "red" : "blue"

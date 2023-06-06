@@ -2,8 +2,8 @@ import "./LoadingSymbol.css";
 
 function LoadingSymbol() {
     return (
-        <div class="loadingio-spinner-ripple-a0171xekhwg">
-            <div class="ldio-ed282vmijeg">
+        <div className="loadingio-spinner-ripple-5eumxftu6yp">
+            <div className="ldio-a942srev4ag">
                 <div></div>
                 <div></div>
             </div>

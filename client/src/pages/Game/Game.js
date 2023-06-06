@@ -101,16 +101,17 @@ function Game({ gameState, customWords, role }) {
         <div className="Game">
             {winner !== "" && winner !== null && <WinScreen winner={winner} />}
             <MessageBox playerTurn={turn} role={role} />
-            {(turn === Turns.RedGuess || turn === Turns.BlueGuess) && (
-                <Counter
-                    wordGuess={currentWordGuess}
-                    guessAmount={playerGuess}
-                />
+            {(turn === Turns.RedGuess || turn === Turns.BlueGuess) &&
+                role === turn && (
+                    <Counter
+                        wordGuess={currentWordGuess}
+                        guessAmount={playerGuess}
+                    />
+                )}
+            {((turn === Turns.BlueSpy && role === "Blue Spy") ||
+                (turn === Turns.RedSpy && role === "Red Spy")) && (
+                <SpyInput handleSpyInput={handleSpyInput} />
             )}
-            {(turn === Turns.BlueSpy && role === "Blue Spy") ||
-                (turn === Turns.RedSpy && role === "Red Spy" && (
-                    <SpyInput handleSpyInput={handleSpyInput} />
-                ))}
             {role !== turn && <Role role={role} />}
             <div className="cell-grid">
                 {cells.map((cell, index) => (
