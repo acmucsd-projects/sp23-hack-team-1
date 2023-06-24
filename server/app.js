@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 
 
 require("dotenv").config();
-//Gonzalo trying out server
+//Gonzalo trying out server, deploying from newly created branch!
 const http = require("http");
 //const hostName = "127.0.0.1";
 const port = 8001;
@@ -16,8 +16,9 @@ const cors = require("cors");
 //end server
 
 //const usersRouter = require('./routes/users');
+
 const Board = require('./Board');
-const { application } = require("express");
+//const { application } = require("express");
 const { Socket } = require("dgram");
 
 let currentBoard;
@@ -122,6 +123,13 @@ res.json(currentBoard);
 }
 
 );
+
+app.get("/api/checkHints", (req, res)=>{
+  const hint = req.query.hint;
+  const isMatch = Board.checkMatch(currentBoard, hint);
+  res.json(isMatch);
+})
+
 
 
 app.get("/api/selectword",

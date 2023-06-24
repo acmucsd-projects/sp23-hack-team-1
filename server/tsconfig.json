@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "module": "amd",
+        "moduleResolution": "classic",
+        "target": "ES6",
+        "sourceMap": true,
+        //"outDir": "dist"
+
+    },
+    "include": ["./"]
+}

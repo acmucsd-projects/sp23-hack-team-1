@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "build" : "tsc"
   },
   "engines": {
     "node": "16.20"
@@ -17,5 +18,8 @@
     "mongoose": "^5.11.13",
     "morgan": "~1.9.1",
     "socket.io": "^4.6.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.3"
   }
 }
