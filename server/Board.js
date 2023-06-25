@@ -122,10 +122,12 @@ function guessWord(index2, sampleBoard) {
         }
         ;
         if (word.color === "black") {
+            
             team = sampleBoard.turn === 'Red Spy' || sampleBoard.turn === "Red Guess" ? 'Blue' : 'Red';
             word.status = "click";
             sampleBoard.playerGuess = sampleBoard.playerGuess - 1;
             //dont need to do if (sampleBoard.playerGuess <= 0) {return endTurn(sampleBoard);};
+            console.log("black sqaure clicked! Team is " + team)
             return endGame(sampleBoard, team);
         }
         else if (word.color === "white") {

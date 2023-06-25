@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "build" : "tsc"
+    "build": "tsc",
+    "test": "jest"
   },
   "engines": {
     "node": "16.20"
@@ -17,9 +18,12 @@
     "http": "^0.0.1-security",
     "mongoose": "^5.11.13",
     "morgan": "~1.9.1",
-    "socket.io": "^4.6.1"
+    "socket.io": "^4.6.1",
+    "supertest": "^6.3.3"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.2",
+    "jest": "^27.5.1",
     "typescript": "^5.1.3"
   }
 }
