@@ -25,6 +25,9 @@ const cors = require("cors");
 const Board = require('./Board');
 //const { application } = require("express");
 const { Socket } = require("dgram");
+const { Prisma } = require("@prisma/client");
+
+const axios = require("axios");
 
 let currentBoard;
 
@@ -73,6 +76,14 @@ websocket.on('connection',
 } //end of connection event
 
 ) //end of websocket
+
+
+
+//Helper Function to get JSON Board State from Room Code
+async function getBoardFromCode(myCode){
+  let myBoard = await prisma.room.findUnique({where: {roomCode: myCode}})
+  return myBoard;
+}
 
 
 
@@ -175,12 +186,30 @@ app.get('/api/endturn',
 
 )
 
-app.get('/',
+app.get('/', 
 
-(req,res) => {
+async (req,res) => {
 
-  if (currentBoard === undefined) {console.log("board is empty, making new");currentBoard = newBoard();res.json(currentBoard); }
-  else{res.json(currentBoard)}
+  frontCode = req.body.roomCode;
+
+  if (frontCode === undefined) {console.log("board is empty, making new");
+
+  let newRoomCode = sequence.generateUniqueSequence(existingSequences);
+  let userBoard = newBoard();
+  let createdBoard = await prisma.room.create({
+      data: {
+        roomCode: newRoomCode,
+        boardState: userBoard
+      }
+    })
+  
+  console.log(createdBoard);
+  res.json(createdBoard); }
+
+
+  else{
+    let existingBoard = await getBoardFromCode(frontCode);
+    res.json(existingBoard)}
 
 }
 
