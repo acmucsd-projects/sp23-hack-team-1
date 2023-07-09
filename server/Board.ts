@@ -1,6 +1,6 @@
 //comment again 2
 
-
+let existingSequences: string[] = []
 let createObjectArrayBoard = require("./wordGenerator.js")
 
 

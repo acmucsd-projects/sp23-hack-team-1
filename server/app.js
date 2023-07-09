@@ -1,10 +1,14 @@
+
+//Reminder to import Request and Response Types from express when you convert to typescript
 const express = require("express");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 
 
-
+const sequence = require("./generateRoomCode")
+const pclient = require("@prisma/client");
+const PrismaClient = pclient.PrismaClient;
 
 require("dotenv").config();
 //Gonzalo trying out server, deploying from newly created branch!
@@ -23,6 +27,8 @@ const Board = require('./Board');
 const { Socket } = require("dgram");
 
 let currentBoard;
+
+let existingSequences = [];
 
 
 const newBoard = Board.newBoard;
@@ -47,14 +53,9 @@ app.use(
 
 dotenv.config();
 
-//NO DB YET
-/*
-mongoose.connect(process.env.DB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true }).then(() => {
-  console.log('Connected to MongoDB database');
-});
-*/
+
+const prisma = new PrismaClient();
+
 
 const server = http.createServer(app);
 
@@ -73,9 +74,6 @@ websocket.on('connection',
 
 ) //end of websocket
 
-//what port is it listening on?
-
-
 
 
 //prints a log once the server starts listening
@@ -84,21 +82,40 @@ server.listen(process.env.PORT || port, () => {
     console.log(`Server1 running on port ${process.env.PORT}`);
 });
 
-//create and return a new board based on user's dictionary
-app.post('/api/newboard', (req,res)=>{
 
-  
+//Start Work here, see how you can do away with a global "currentBoard" and instead make a function that looks up a board from its key and returns the JSON
+
+//Once This is pinged by front end, it will create a new board in the database with a random 4 character room code. returns the room code
+app.post('/api/newboard', async (req,res)=>{
+
+  let newRoomCode = sequence.generateUniqueSequence(existingSequences);
+  console.log("new room code is " + newRoomCode);
+
+
   //if user did not input their own dictionary, generate new board using default dict
   if (!req.body.customizedDict) {
-    currentBoard = newBoard();
-    res.json(currentBoard);
+
+    let userBoard = newBoard();
+    let createdBoard = await prisma.room.create({
+      data: {
+        roomCode: newRoomCode,
+        boardState: userBoard
+      }
+    })
+    //currentBoard = newBoard();
+    res.json(createdBoard);
   } 
   //if user did input their own dictionary and it has enough word to turn it into dictionary
   else if (req.body.customizedDict.length >= 25) {
     //console.log("customizedDict is "+ req.body.customizedDict);
-    currentBoard = Board.customizeNewBoard(req.body.customizedDict);
-    
-    res.json(currentBoard);
+    let userBoard = Board.customizeNewBoard(req.body.customizedDict);
+    let createdBoard = await prisma.room.create({
+      data: {
+        roomCode: newRoomCode,
+        boardState: userBoard
+      }
+    })
+    res.json(createdBoard);
   }
   //report an error message if words is not enough
   else {
