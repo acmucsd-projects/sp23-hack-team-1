@@ -13,9 +13,8 @@ function generateUniqueSequence(existingSequences) {
     }
     return sequence;
 }
+module.exports =
+    {
+        generateUniqueSequence
+    };
 //# sourceMappingURL=generateRoomCode.js.map
-module.exports = 
-
-{
-    generateUniqueSequence
-}

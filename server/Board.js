@@ -1,5 +1,4 @@
 //comment again 2
-let existingSequences = [];
 let createObjectArrayBoard = require("./wordGenerator.js");
 const objectArray = require("./wordGenerator");
 let userDictionary = [];
@@ -181,6 +180,7 @@ function selectWord(word1, numGuesses, sampleBoard) {
 }
 //module.exports = newBoard;
 module.exports = {
+    Board,
     customizeNewBoard,
     newBoard,
     clearDictionary,

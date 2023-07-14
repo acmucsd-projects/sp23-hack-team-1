@@ -1,6 +1,6 @@
 //comment again 2
 
-let existingSequences: string[] = []
+
 let createObjectArrayBoard = require("./wordGenerator.js")
 
 
@@ -211,6 +211,7 @@ function selectWord(word1:string,numGuesses:number,sampleBoard:Board){
 
 //module.exports = newBoard;
 module.exports = {
+    Board,
     customizeNewBoard,
     newBoard,
     clearDictionary,
