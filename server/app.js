@@ -1,8 +1,7 @@
 
 //Reminder to import Request and Response Types from express when you convert to typescript
 const express = require("express");
-const logger = require("morgan");
-const mongoose = require("mongoose");
+
 const dotenv = require("dotenv");
 
 
@@ -11,19 +10,14 @@ const pclient = require("@prisma/client");
 const PrismaClient = pclient.PrismaClient;
 
 require("dotenv").config();
-//Gonzalo trying out server, deploying from newly created branch!
+
+
 const http = require("http");
-//const hostName = "127.0.0.1";
 const port = 8001;
-
-const cors = require("cors");
-
-//end server
-
-//const usersRouter = require('./routes/users');
-
+const cors = require("cors"); 
 const Board = require('./Board');
-//const { application } = require("express");
+
+
 const { Socket } = require("dgram");
 const { Prisma } = require("@prisma/client");
 
@@ -41,7 +35,7 @@ const selectWord = Board.selectWord;
 
 const app = express();
 
-//app.use(logger("dev"));
+
 app.use(express.json());
 //app.use(express.urlencoded({ extended: false }));
 
@@ -52,7 +46,7 @@ app.use(
     })
 );
 
-//app.use("/users", usersRouter);
+
 
 dotenv.config();
 
@@ -82,7 +76,7 @@ websocket.on('connection',
 //Helper Function to get JSON Board State from Room Code
 async function getBoardFromCode(myCode){
   let myBoard = await prisma.room.findUnique({where: {roomCode: myCode}})
-  return myBoard;
+  return myBoard.boardState;
 }
 
 
@@ -90,11 +84,11 @@ async function getBoardFromCode(myCode){
 //prints a log once the server starts listening
 //change back to server.listen if needed
 server.listen(process.env.PORT || port, () => {
-    console.log(`Server1 running on port ${process.env.PORT}`);
+    console.log(`Server1 running on port ${process.env.PORT || port}`);
 });
 
 
-//Start Work here, see how you can do away with a global "currentBoard" and instead make a function that looks up a board from its key and returns the JSON
+
 
 //Once This is pinged by front end, it will create a new board in the database with a random 4 character room code. returns the room code
 app.post('/api/newboard', async (req,res)=>{
@@ -113,8 +107,8 @@ app.post('/api/newboard', async (req,res)=>{
         boardState: userBoard
       }
     })
-    //currentBoard = newBoard();
-    res.json(createdBoard);
+    
+    res.json(newRoomCode);
   } 
   //if user did input their own dictionary and it has enough word to turn it into dictionary
   else if (req.body.customizedDict.length >= 25) {
@@ -126,7 +120,7 @@ app.post('/api/newboard', async (req,res)=>{
         boardState: userBoard
       }
     })
-    res.json(createdBoard);
+    res.json(newRoomCode);
   }
   //report an error message if words is not enough
   else {
@@ -134,57 +128,120 @@ app.post('/api/newboard', async (req,res)=>{
   }
 });
 
+
+/*IDK if this fits into the new iteration of the program
 app.get('/api/clearDictionary', (req,res)=>{
   Board.clearDictionary();
   res.send("user's dictionary is cleared");
-});
+}); */
 
 
+//This PUT endpoint takes the room code as a query as input. Then it grabs the according board state and guesses the word, and updates db with new
+//board. returns board
+app.put("/api/guess",
 
-app.get("/api/guess",
+async (req,res) => {
 
-(req,res) => {
+let inputCode = req.query.code;
+console.log("in guess, code is " + inputCode);
+let inputBoard = await getBoardFromCode(inputCode);
 
-let b = guessWord(req.query.index,currentBoard);
-currentBoard = b;
-res.json(currentBoard);
+let b = guessWord(req.query.index,inputBoard);
+//update inputBoard in DB with b
+let updatedBoard = await prisma.room.update({
+ where : {roomCode: inputCode},
+ data: {boardState: b}
+})
+
+res.json(updatedBoard.boardState);
 
 }
 
 );
 
-app.get("/api/checkHints", (req, res)=>{
+
+//This function takes a room code and a hint and returns if the hint is valid (boolean)
+app.get("/api/checkHints", async (req, res)=>{
+
+  let frontCode = req.query.code
+  let existingBoard = await getBoardFromCode(frontCode);
   const hint = req.query.hint;
-  const isMatch = Board.checkMatch(currentBoard, hint);
+  const isMatch = Board.checkMatch(existingBoard, hint);
   res.json(isMatch);
 })
 
 
+//This lets the spymasters pick a word and returns the board with currentWordGuess altered and turn changed.
+app.put("/api/selectword",
 
-app.get("/api/selectword",
+async (req,res) => {
+  
+let inputCode = req.query.code;
+let inputBoard = await getBoardFromCode(inputCode);
+//console.log(inputCode)
+//console.log(inputBoard)
+let c = selectWord(req.query.currentWordGuess,req.query.playerGuess,inputBoard);
 
-(req,res) => {
-let c = selectWord(req.query.currentWordGuess,req.query.playerGuess,currentBoard);
-currentBoard = c;
-res.json(currentBoard);
+let updatedBoard = await prisma.room.update({
+  where: {roomCode: inputCode },
+  data: {boardState: c}
+})
+res.json(updatedBoard.boardState);
 
 }
 
 );
 
+//this endpoint makes a new board state for the given room code.
+app.put('/api/newgame',
 
-app.get('/api/endgame',
-(req,res) => {currentBoard = undefined; res.json("Game over, board deleted");}
+async (req,res) => {
+
+  inputCode = req.query.code;
+  let resetBoard;
+  //I think that it would be cool for word sets to be preserved with Userss after authentication, but for now just send the word list in the body
+  if (req.body.customizedDict == undefined){
+    resetBoard = newBoard() }
+  else {
+    resetBoard = customizeNewBoard(req.body.customizedDict)
+  }
+
+  let updatedBoard = await prisma.room.update({
+    where: {roomCode: inputCode},
+    data: {boardState: resetBoard}
+  })
+
+  res.json(updatedBoard.boardState);
+}
+
+
 
 )
 
+//This deletes the entire db entry with the room code and board state,, removes roomCode from existing sequences
+app.delete('/api/endgame',
+async (req,res) => {
+  inputCode = req.query.code;
+
+  let deletedBoard = await prisma.room.delete({
+    where: {roomCode: inputCode}
+  })
+  
+  existingSequences = existingSequences.filter(string => !string.includes(inputCode)); //removes room code from existing sequences
+
+  res.json(deletedBoard.boardState);}
+
+)
+
+//I don't think this endpoint is targeted from normal gameplay, just the function itself internally
+/*
 app.get('/api/endturn',
 
 (req,res) => {
   res.json(endTurn(currentBoard))
 }
 
-)
+)*/
 
 app.get('/', 
 
@@ -203,8 +260,8 @@ async (req,res) => {
       }
     })
   
-  console.log(createdBoard);
-  res.json(createdBoard); }
+  //console.log(createdBoard);
+  res.json(createdBoard.boardState); }
 
 
   else{
