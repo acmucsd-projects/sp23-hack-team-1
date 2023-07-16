@@ -27,16 +27,19 @@ describe("API Localhost Tests", ()=>{
     test("Simulating a game", async ()=>{
 
 
-    //Generating new Board
-    const response1 = await request(app).get('/');
+    //Generating new Code
+    const response1 = await request(app).post('/api/newBoard');
     expect(response1.status).toBe(200);
-    //console.log(response.body);
-    expect(response1.body).toBeInstanceOf(Object);
+    //console.log(typeof(response1.body));
+    expect( typeof(response1.body)).toBe("string");
+    let codeWord = "&code=" + response1.body;
 
     //selecting a word - playerGuess and currentWordGuess should update, and turn should be "Red Guess"
-    const response2 = await request(app).get('/api/selectword?currentWordGuess=china&playerGuess=3');
+    console.log('/api/selectword?currentWordGuess=china&playerGuess=3' + codeWord);
+    const response2 = await request(app).put('/api/selectword?currentWordGuess=china&playerGuess=3' + codeWord);
     expect(response2.status).toBe(200);
     expect(response2.body).toBeInstanceOf(Object);
+    
 
     expect(response2.body.playerGuess).toEqual("3");
     expect(response2.body.currentWordGuess).toEqual("china");
@@ -44,7 +47,7 @@ describe("API Localhost Tests", ()=>{
 
     //checking hints? TODO
 
-
+    
     //getting words
     let redIndex;
     let blueIndex;
@@ -64,7 +67,7 @@ describe("API Localhost Tests", ()=>{
     //console.log(`${redIndex} ${blueIndex} ${whiteIndex} ${blackIndex}`);
 
     //Guessing a word that is red
-    const response3 = await request(app).get(`/api/guess?index=${redIndex}`);
+    const response3 = await request(app).put(`/api/guess?index=${redIndex}` + codeWord);
     expect(response3.status).toBe(200);
     expect(response3.body).toBeInstanceOf(Object);
 
@@ -74,7 +77,7 @@ describe("API Localhost Tests", ()=>{
     
     //Guessing a word that is blue
 
-    const response4 = await request(app).get(`/api/guess?index=${blueIndex}`);
+    const response4 = await request(app).put(`/api/guess?index=${blueIndex}`+codeWord);
     expect(response4.status).toBe(200);
     expect(response4.body).toBeInstanceOf(Object);
 
@@ -83,7 +86,7 @@ describe("API Localhost Tests", ()=>{
     expect(response4.body.playerGuess).toEqual(1);
     //Guessing a word that is white
 
-    const response5 = await request(app).get(`/api/guess?index=${whiteIndex}`);
+    const response5 = await request(app).put(`/api/guess?index=${whiteIndex}`+codeWord);
     expect(response5.status).toBe(200);
     expect(response5.body).toBeInstanceOf(Object);
 
@@ -95,7 +98,7 @@ describe("API Localhost Tests", ()=>{
     expect(response5.body.turn).toEqual("Blue Spy");
     
     //Guess another word (Blue Spy)
-    const response6 = await request(app).get('/api/selectword?currentWordGuess=burgers&playerGuess=2');
+    const response6 = await request(app).put('/api/selectword?currentWordGuess=burgers&playerGuess=2'+codeWord);
     expect(response6.status).toBe(200);
     expect(response6.body).toBeInstanceOf(Object);
 
@@ -105,11 +108,27 @@ describe("API Localhost Tests", ()=>{
 
 
     //Blue Guesser guesses the black square and the game ends with red as the winner. 
-    const response7 = await request(app).get(`/api/guess?index=${blackIndex}`);
+    const response7 = await request(app).put(`/api/guess?index=${blackIndex}`+codeWord);
     expect(response7.status).toBe(200);
     expect(response7.body).toBeInstanceOf(Object);
     console.log(blackIndex);
     expect(response7.body.winner).toEqual("Red");
+
+
+    //test newgame
+    const response8 = await request(app).put('/api/newgame?code='+response1.body);
+    expect(response8.status).toBe(200);
+    expect(response8.body).toBeInstanceOf(Object);
+    expect(response8.body.redScore).toEqual(9);
+    expect(response8.body.turn).toEqual("Red Spy")
+    
+    //test endgame
+    const response9 = await request(app).delete('/api/endgame?code=' + response1.body);
+    expect(response9.status).toBe(200);
+    expect(response9.body).toBeInstanceOf(Object);
+
+    const response10 = await request(app).put("'/api/selectword?currentWordGuess=burgers2&playerGuess=2"+codeWord); //shouldn't work
+    expect(response10.body.status).toBe(undefined);
 
 
     })

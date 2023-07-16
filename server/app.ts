@@ -2,6 +2,8 @@
 //Reminder to import Request and Response Types from express when you convert to typescript
 const express = require("express");
 
+
+
 const dotenv = require("dotenv");
 
 
@@ -22,11 +24,11 @@ const cors = require("cors");
 const { Socket } = require("dgram");
 const { Prisma } = require("@prisma/client");
 
-const axios = require("axios");
+//const axios = require("axios");
 
 let currentBoard;
 
-let existingSequences = [];
+let existingSequences: string[] = [];
 
 let Bstuff = require("./Board.js");
 
@@ -37,6 +39,8 @@ let Bstuff = require("./Board.js");
 
 const app = express();
 
+
+type databaseEntry = {id: Number, roomCode: string, boardState: Board}
 
 app.use(express.json());
 //app.use(express.urlencoded({ extended: false }));
@@ -76,8 +80,8 @@ websocket.on('connection',
 
 
 //Helper Function to get JSON Board State from Room Code
-async function getBoardFromCode(myCode){
-  let myBoard = await prisma.room.findUnique({where: {roomCode: myCode}})
+async function getBoardFromCode(myCode: string):Promise<Board>{
+  let myBoard: databaseEntry = await prisma.room.findUnique({where: {roomCode: myCode}})
   return myBoard.boardState;
 }
 
@@ -93,17 +97,17 @@ server.listen(process.env.PORT || port, () => {
 
 
 //Once This is pinged by front end, it will create a new board in the database with a random 4 character room code. returns the room code
-app.post('/api/newboard', async (req,res)=>{
+app.post('/api/newboard', async (req,res) =>{
 
-  let newRoomCode = sequence.generateUniqueSequence(existingSequences);
+  let newRoomCode:string = sequence.generateUniqueSequence(existingSequences);
   console.log("new room code is " + newRoomCode);
 
 
   //if user did not input their own dictionary, generate new board using default dict
   if (!req.body.customizedDict) {
 
-    let userBoard = Bstuff.newBoard();
-    let createdBoard = await prisma.room.create({
+    let userBoard:Board = Bstuff.newBoard();
+    let createdBoard:databaseEntry = await prisma.room.create({
       data: {
         roomCode: newRoomCode,
         boardState: userBoard
@@ -115,8 +119,8 @@ app.post('/api/newboard', async (req,res)=>{
   //if user did input their own dictionary and it has enough word to turn it into dictionary
   else if (req.body.customizedDict.length >= 25) {
     //console.log("customizedDict is "+ req.body.customizedDict);
-    let userBoard = Bstuff.customizeNewBoard(req.body.customizedDict);
-    let createdBoard = await prisma.room.create({
+    let userBoard:Board = Bstuff.customizeNewBoard(req.body.customizedDict);
+    let createdBoard:databaseEntry = await prisma.room.create({
       data: {
         roomCode: newRoomCode,
         boardState: userBoard
@@ -144,13 +148,13 @@ app.put("/api/guess",
 
 async (req,res) => {
 
-let inputCode = req.query.code;
-console.log("in guess, code is " + inputCode);
-let inputBoard = await getBoardFromCode(inputCode);
+let inputCode:string = req.query.code;
+//console.log("in guess, code is " + inputCode);
+let inputBoard:Board = await getBoardFromCode(inputCode);
 
-let b = Bstuff.guessWord(req.query.index,inputBoard);
+let b:Board = Bstuff.guessWord(req.query.index,inputBoard);
 //update inputBoard in DB with b
-let updatedBoard = await prisma.room.update({
+let updatedBoard:databaseEntry = await prisma.room.update({
  where : {roomCode: inputCode},
  data: {boardState: b}
 })
@@ -165,10 +169,10 @@ res.json(updatedBoard.boardState);
 //This function takes a room code and a hint and returns if the hint is valid (boolean)
 app.get("/api/checkHints", async (req, res)=>{
 
-  let frontCode = req.query.code
-  let existingBoard = await getBoardFromCode(frontCode);
-  const hint = req.query.hint;
-  const isMatch = Bstuff.checkMatch(existingBoard, hint);
+  let frontCode:string = req.query.code
+  let existingBoard:Board = await getBoardFromCode(frontCode);
+  const hint:string = req.query.hint;
+  const isMatch:boolean = Bstuff.checkMatch(existingBoard, hint);
   res.json(isMatch);
 })
 
@@ -178,13 +182,13 @@ app.put("/api/selectword",
 
 async (req,res) => {
   
-let inputCode = req.query.code;
-let inputBoard = await getBoardFromCode(inputCode);
+let inputCode:string = req.query.code;
+let inputBoard:Board = await getBoardFromCode(inputCode);
 //console.log(inputCode)
 //console.log(inputBoard)
-let c = Bstuff.selectWord(req.query.currentWordGuess,req.query.playerGuess,inputBoard);
+let c:Board = Bstuff.selectWord(req.query.currentWordGuess,req.query.playerGuess,inputBoard);
 
-let updatedBoard = await prisma.room.update({
+let updatedBoard:databaseEntry = await prisma.room.update({
   where: {roomCode: inputCode },
   data: {boardState: c}
 })
@@ -199,8 +203,8 @@ app.put('/api/newgame',
 
 async (req,res) => {
 
-  let inputCode = req.query.code;
-  let resetBoard;
+  let inputCode:string = req.query.code;
+  let resetBoard:Board;
   //I think that it would be cool for word sets to be preserved with Userss after authentication, but for now just send the word list in the body
   if (req.body.customizedDict == undefined){
     resetBoard = Bstuff.newBoard() }
@@ -208,7 +212,7 @@ async (req,res) => {
     resetBoard = Bstuff.customizeNewBoard(req.body.customizedDict)
   }
 
-  let updatedBoard = await prisma.room.update({
+  let updatedBoard:databaseEntry = await prisma.room.update({
     where: {roomCode: inputCode},
     data: {boardState: resetBoard}
   })
@@ -223,9 +227,9 @@ async (req,res) => {
 //This deletes the entire db entry with the room code and board state,, removes roomCode from existing sequences
 app.delete('/api/endgame',
 async (req,res) => {
-  let inputCode = req.query.code;
+  let inputCode:string = req.query.code;
 
-  let deletedBoard = await prisma.room.delete({
+  let deletedBoard:databaseEntry = await prisma.room.delete({
     where: {roomCode: inputCode}
   })
   
@@ -249,13 +253,13 @@ app.get('/',
 
 async (req,res) => {
 
-  let frontCode = req.body.roomCode;
+  let frontCode:string = req.query.code;
 
   if (frontCode === undefined) {console.log("board is empty, making new");
 
-  let newRoomCode = sequence.generateUniqueSequence(existingSequences);
-  let userBoard = Bstuff.newBoard();
-  let createdBoard = await prisma.room.create({
+  let newRoomCode:string = sequence.generateUniqueSequence(existingSequences);
+  let userBoard:Board = Bstuff.newBoard();
+  let createdBoard:databaseEntry = await prisma.room.create({
       data: {
         roomCode: newRoomCode,
         boardState: userBoard
@@ -267,7 +271,7 @@ async (req,res) => {
 
 
   else{
-    let existingBoard = await getBoardFromCode(frontCode);
+    let existingBoard:Board = await getBoardFromCode(frontCode);
     res.json(existingBoard)}
 
 }

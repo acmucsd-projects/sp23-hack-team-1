@@ -20,7 +20,7 @@ const cors = require("cors");
 //const Board = require('./Board');
 const { Socket } = require("dgram");
 const { Prisma } = require("@prisma/client");
-const axios = require("axios");
+//const axios = require("axios");
 let currentBoard;
 let existingSequences = [];
 let Bstuff = require("./Board.js");
@@ -101,7 +101,7 @@ app.get('/api/clearDictionary', (req,res)=>{
 //board. returns board
 app.put("/api/guess", (req, res) => __awaiter(this, void 0, void 0, function* () {
     let inputCode = req.query.code;
-    console.log("in guess, code is " + inputCode);
+    //console.log("in guess, code is " + inputCode);
     let inputBoard = yield getBoardFromCode(inputCode);
     let b = Bstuff.guessWord(req.query.index, inputBoard);
     //update inputBoard in DB with b
