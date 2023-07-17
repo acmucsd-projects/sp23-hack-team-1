@@ -42,12 +42,23 @@ const server = http.createServer(app);
 let websocket = require('socket.io')(server, { cors: { origin: "*" } });
 websocket.on('connection', (socket) => {
     console.log("user connected to websockets");
-    socket.on("update", (message) => {
-        console.log("update received from user");
-        websocket.emit("updateBoard", currentBoard);
+    //Join Room
+    socket.on("joinRoom", (req) => {
+        //console.log("reached joinRoom")
+        let code = req;
+        socket.join(code);
+        console.log("user joined " + code);
     });
-} //end of connection event
-); //end of websocket
+    socket.on("update", (req) => __awaiter(this, void 0, void 0, function* () {
+        console.log("update received from user");
+        let code = req;
+        let sharedBoard = yield getBoardFromCode(code);
+        //console.log(sharedBoard); //delete
+        //so it can actually retrieve the board but it is not sending the response back unless that request connected to the channel
+        websocket.to(code).emit("updateBoard", sharedBoard);
+    }));
+    //websocket.emit("updateBoard",)})
+}); //end of websocket
 //Helper Function to get JSON Board State from Room Code
 function getBoardFromCode(myCode) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -168,7 +179,7 @@ app.get('/api/endturn',
 
 )*/
 app.get('/', (req, res) => __awaiter(this, void 0, void 0, function* () {
-    let frontCode = req.body.roomCode;
+    let frontCode = req.query.code;
     if (frontCode === undefined) {
         console.log("board is empty, making new");
         let newRoomCode = sequence.generateUniqueSequence(existingSequences);

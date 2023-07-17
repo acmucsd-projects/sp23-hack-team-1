@@ -1,4 +1,5 @@
 
+
 //Reminder to import Request and Response Types from express when you convert to typescript
 const express = require("express");
 
@@ -69,11 +70,27 @@ let websocket = require('socket.io')(server,
 
 websocket.on('connection',
 (socket) => {console.log("user connected to websockets");
- socket.on("update", (message) =>{
-  console.log("update received from user");
-  websocket.emit("updateBoard",currentBoard)})
 
-} //end of connection event
+  //Join Room
+  socket.on("joinRoom",(req) =>{
+    //console.log("reached joinRoom")
+    let code:string = req
+    socket.join(code);
+    console.log("user joined " + code)});
+
+
+
+ socket.on("update", async (req) =>{ //You can just pass strings to websocket functions if you want to
+  console.log("update received from user");
+  let code = req
+  let sharedBoard: Board = await getBoardFromCode(code);
+  //console.log(sharedBoard); //delete
+  //so it can actually retrieve the board but it is not sending the response back unless that request connected to the channel
+  websocket.to(code).emit("updateBoard",sharedBoard);})
+  //websocket.emit("updateBoard",)})
+
+}, //end of connection event - room should be left and connection disconnected automatically
+
 
 ) //end of websocket
 
