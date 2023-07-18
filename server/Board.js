@@ -1,7 +1,6 @@
 //comment again 2
 let createObjectArrayBoard = require("./wordGenerator.js");
 const objectArray = require("./wordGenerator");
-let userDictionary = [];
 class Board {
     constructor(redScore, blueScore, turn, words, playerGuess = null, currentWordGuess = null, winner = null) {
         this.currentWordGuess = null;
@@ -37,24 +36,14 @@ this.printBoard = () => {console.log(this)};
 } */
 function newBoard() {
     let newboard;
-    if (userDictionary.length >= 25) {
-        console.log("we triggered custom board");
-        newboard = new Board(9, 8, "Red Spy", createObjectArrayBoard(userDictionary));
-    }
-    else {
-        newboard = new Board(9, 8, "Red Spy", createObjectArrayBoard());
-    }
+    newboard = new Board(9, 8, "Red Spy", createObjectArrayBoard());
     return newboard;
 }
 function customizeNewBoard(dictionary) {
     console.log("dictionary is " + dictionary);
-    userDictionary = dictionary;
-    let customizedNewBoard = newBoard();
+    let customizedNewBoard = new Board(9, 8, "Red Spy", createObjectArrayBoard(dictionary));
     console.log("returning this: " + customizedNewBoard.words[0]);
     return customizedNewBoard;
-}
-function clearDictionary() {
-    userDictionary = [];
 }
 //changes the current team's turn to pick words
 function endTurn(board) {
@@ -183,7 +172,6 @@ module.exports = {
     Board,
     customizeNewBoard,
     newBoard,
-    clearDictionary,
     guessWord,
     selectWord,
     checkMatch,
