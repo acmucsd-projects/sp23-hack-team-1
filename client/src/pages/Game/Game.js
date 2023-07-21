@@ -3,6 +3,7 @@ import WordCell from "../../components/Word Cell/WordCell";
 import Counter from "../../components/Counter/Counter";
 import SpyInput from "../../components/SpyInput/SpyInput";
 import MessageBox from "../../components/MessageBox/MessageBox";
+import RoomCode from "../../components/RoomCode/RoomCode";
 import WinScreen from "../../components/WinScreen/WinScreen";
 import { socket } from "../../socket";
 import "./Game.css";
@@ -21,7 +22,7 @@ const Turns = {
  * setCards: a function of which to set the state of with the cards obtained from the api.
  * @returns {void}
  */
-async function getCards(gameState, customWords) {
+async function getCards(gameState, customWords, setRoomCode) {
     let response;
     if (gameState === "new-userinput") {
         response = await fetch(
@@ -39,7 +40,9 @@ async function getCards(gameState, customWords) {
             }
         );
     } else if (gameState === "new-random") {
-        await fetch("https://codenames-acm.herokuapp.com/api/clearDictionary");
+        // this was used to clear the player dictionary since we only had one variable
+        // storing a player's dictionary.... now defunct?
+        // await fetch("https://codenames-acm.herokuapp.com/api/clearDictionary");
         response = await fetch(
             "https://codenames-acm.herokuapp.com/api/newboard",
             {
@@ -53,8 +56,11 @@ async function getCards(gameState, customWords) {
     } else {
         response = await fetch("https://codenames-acm.herokuapp.com/");
     }
-    await response.json();
-    socket.emit("update");
+    const roomcode = await response.json();
+    console.log(`room code: ${roomcode}`);
+    setRoomCode(roomcode);
+    socket.emit("joinRoom", roomcode);
+    socket.emit("update", roomcode);
 }
 
 function Game({ gameState, customWords, role }) {
@@ -67,8 +73,10 @@ function Game({ gameState, customWords, role }) {
 
     const [winner, setWinner] = useState("");
 
+    const [roomcode, setRoomCode] = useState("");
+
     useEffect(() => {
-        getCards(gameState, customWords);
+        getCards(gameState, customWords, setRoomCode);
         socket.on("updateBoard", (message) => {
             if (message != null) {
                 setPlayerGuess(message.playerGuess);
@@ -84,23 +92,28 @@ function Game({ gameState, customWords, role }) {
     async function handleCardClick(index) {
         if (playerGuess > 0) {
             await fetch(
-                `https://codenames-acm.herokuapp.com/api/guess?index=${index}`
+                `https://codenames-acm.herokuapp.com/api/guess?index=${index}&code=${roomcode}`
             );
-            socket.emit("update");
+            socket.emit("update", roomcode);
         }
     }
 
     async function handleSpyInput(word, amount) {
         await fetch(
-            `https://codenames-acm.herokuapp.com/api/selectword?currentWordGuess=${word}&playerGuess=${amount}`
+            `https://codenames-acm.herokuapp.com/api/selectword?currentWordGuess=${word}&code=${roomcode}&playerGuess=${amount}`,
+            {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+            }
         );
-        socket.emit("update");
+        socket.emit("update", roomcode);
     }
 
     return (
         <div className="Game">
             {winner !== "" && winner !== null && <WinScreen winner={winner} />}
             <MessageBox playerTurn={turn} role={role} />
+            <RoomCode roomcode={roomcode} />
             {(turn === Turns.RedGuess || turn === Turns.BlueGuess) &&
                 role === turn && (
                     <Counter
