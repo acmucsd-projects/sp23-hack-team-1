@@ -12,8 +12,9 @@
 .StartMenu {
     display: flex;
     flex-direction: column;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    min-height: 100vh;
+    height: 100%;
     align-items: center;
     justify-content: center;
     background-color: #f0f0f0;
@@ -115,6 +116,32 @@
     border-width: 10px;
     border-color: #b02a37;
     margin: 0.5rem;
+}
+
+.roomcode-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* this will center the container */
+    margin-top: 1rem; /* add some space above the container */
+    margin-bottom: 1rem;
+}
+
+.roomcode-container label {
+    margin-right: 1rem;
+    font-size: 1.2rem; /* adjust this to match your button font size */
+    color: #555;
+    font-weight: 600; /* match your button font weight */
+}
+
+#roomcodeInput {
+    width: 10rem; /* match your button width */
+    height: 1.5rem;
+    padding: 0.7rem; /* adjust as needed */
+    border: 2px solid #bbb;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    text-align: center; /* center the text input */
+    box-sizing: border-box; /* to include padding and border in element's total width and height */
 }
 
 @keyframes fadeIn {

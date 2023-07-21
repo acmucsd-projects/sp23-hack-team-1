@@ -2,12 +2,16 @@ import { useState } from "react";
 import "./StartMenu.css";
 import ButtonDropdown from "../../components/ButtonDropdown/ButtonDropdown";
 
-function StartMenu({ setGameState, setCustomWords, setRole }) {
+function StartMenu({ setGameState, setCustomWords, setRole, setRoomCode }) {
     const [wordBank, setWordBank] = useState("");
     const [wordBankError, setWordBankError] = useState(false);
 
     const [userSelection, setUserSelection] = useState(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const handleRoomCodeInput = (e) => {
+        setRoomCode(e.target.value);
+    };
 
     const handleUserInput = (e) => {
         setWordBank(e.target.value);
@@ -76,6 +80,14 @@ function StartMenu({ setGameState, setCustomWords, setRole }) {
                 }}>
                 Join Existing
             </button>
+            {userSelection === "existing" && isDropdownOpen && (
+                <div className="roomcode-container">
+                    <label htmlFor="roomcodeInput">Room Code:</label>
+                    <input
+                        id="roomcodeInput"
+                        onChange={handleRoomCodeInput}></input>
+                </div>
+            )}
             {userSelection === "existing" && isDropdownOpen && (
                 <ButtonDropdown handleOptionClick={handleOptionClick} />
             )}

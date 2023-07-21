@@ -22,8 +22,9 @@ const Turns = {
  * setCards: a function of which to set the state of with the cards obtained from the api.
  * @returns {void}
  */
-async function getCards(gameState, customWords, setRoomCode) {
+async function getCards(gameState, customWords, roomcode, setRoomCode) {
     let response;
+    let newRoomCode = roomcode;
     if (gameState === "new-userinput") {
         response = await fetch(
             "https://codenames-acm.herokuapp.com/api/newboard",
@@ -53,17 +54,19 @@ async function getCards(gameState, customWords, setRoomCode) {
                 },
             }
         );
+        newRoomCode = await response.json();
     } else {
-        response = await fetch("https://codenames-acm.herokuapp.com/");
+        response = await fetch(
+            `https://codenames-acm.herokuapp.com/api/?code=${roomcode}`
+        );
     }
-    const roomcode = await response.json();
-    console.log(`room code: ${roomcode}`);
-    setRoomCode(roomcode);
-    socket.emit("joinRoom", roomcode);
-    socket.emit("update", roomcode);
+    console.log(`room code: ${newRoomCode}`);
+    setRoomCode(newRoomCode);
+    socket.emit("joinRoom", newRoomCode);
+    socket.emit("update", newRoomCode);
 }
 
-function Game({ gameState, customWords, role }) {
+function Game({ gameState, customWords, role, roomcode, setRoomCode }) {
     const [cells, setCells] = useState([]);
     const [playerGuess, setPlayerGuess] = useState(0);
 
@@ -73,10 +76,8 @@ function Game({ gameState, customWords, role }) {
 
     const [winner, setWinner] = useState("");
 
-    const [roomcode, setRoomCode] = useState("");
-
     useEffect(() => {
-        getCards(gameState, customWords, setRoomCode);
+        getCards(gameState, customWords, roomcode, setRoomCode);
         socket.on("updateBoard", (message) => {
             if (message != null) {
                 setPlayerGuess(message.playerGuess);

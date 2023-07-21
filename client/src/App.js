@@ -6,10 +6,17 @@ function App() {
     const [gameState, setGameState] = useState("");
     const [customWords, setCustomWords] = useState([]);
     const [role, setRole] = useState("Red Guess");
+    const [roomcode, setRoomCode] = useState("");
 
     if (gameState !== "") {
         return (
-            <Game gameState={gameState} customWords={customWords} role={role} />
+            <Game
+                gameState={gameState}
+                customWords={customWords}
+                role={role}
+                roomcode={roomcode}
+                setRoomCode={setRoomCode}
+            />
         );
     } else {
         return (
@@ -17,6 +24,7 @@ function App() {
                 setRole={setRole}
                 setGameState={setGameState}
                 setCustomWords={setCustomWords}
+                setRoomCode={setRoomCode}
             />
         );
     }
