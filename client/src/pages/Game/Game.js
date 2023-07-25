@@ -93,7 +93,11 @@ function Game({ gameState, customWords, role, roomcode, setRoomCode }) {
     async function handleCardClick(index) {
         if (playerGuess > 0) {
             await fetch(
-                `https://codenames-acm.herokuapp.com/api/guess?index=${index}&code=${roomcode}`
+                `https://codenames-acm.herokuapp.com/api/guess?index=${index}&code=${roomcode}`,
+                {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                }
             );
             socket.emit("update", roomcode);
         }

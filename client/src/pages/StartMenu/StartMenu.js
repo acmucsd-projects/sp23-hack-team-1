@@ -2,12 +2,20 @@ import { useState } from "react";
 import "./StartMenu.css";
 import ButtonDropdown from "../../components/ButtonDropdown/ButtonDropdown";
 
-function StartMenu({ setGameState, setCustomWords, setRole, setRoomCode }) {
+function StartMenu({
+    setGameState,
+    setCustomWords,
+    setRole,
+    roomcode,
+    setRoomCode,
+}) {
     const [wordBank, setWordBank] = useState("");
     const [wordBankError, setWordBankError] = useState(false);
 
     const [userSelection, setUserSelection] = useState(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const [roomcodeError, setRoomCodeError] = useState(false);
 
     const handleRoomCodeInput = (e) => {
         setRoomCode(e.target.value);
@@ -36,8 +44,15 @@ function StartMenu({ setGameState, setCustomWords, setRole, setRoomCode }) {
     };
 
     const handleOptionClick = (option) => {
-        setRole(option);
-        setGameState(userSelection);
+        if (userSelection === "existing" && roomcode !== "") {
+            setRole(option);
+            setGameState(userSelection);
+        } else if (userSelection === "existing") {
+            setRoomCodeError(true);
+        } else {
+            setRole(option);
+            setGameState(userSelection);
+        }
     };
 
     return (
@@ -80,6 +95,13 @@ function StartMenu({ setGameState, setCustomWords, setRole, setRoomCode }) {
                 }}>
                 Join Existing
             </button>
+            {userSelection === "existing" &&
+                isDropdownOpen &&
+                roomcodeError && (
+                    <div className="wordlist-error">
+                        Please enter a room code
+                    </div>
+                )}
             {userSelection === "existing" && isDropdownOpen && (
                 <div className="roomcode-container">
                     <label htmlFor="roomcodeInput">Room Code:</label>

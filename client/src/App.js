@@ -25,6 +25,7 @@ function App() {
                 setGameState={setGameState}
                 setCustomWords={setCustomWords}
                 setRoomCode={setRoomCode}
+                roomcode={roomcode}
             />
         );
     }
