@@ -1,0 +1,22 @@
+.position-code {
+    position: fixed;
+    left: 50%;
+    top: 78%;
+    transform: translate(-50%, -10%);
+}
+
+.text {
+    color: #202020;
+    width: 200px;
+    height: 40px;
+    background-color: #ffffff;
+    border: 5px solid #3b3b3b;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    text-align: center;
+    padding: 0 7px;
+    margin-right: 10px;
+}

@@ -1,6 +1,8 @@
 import "./WordCell.css";
 import { Turns } from "../../pages/Game/Game";
 
+// TODOOOOO: FIX
+
 function WordCell({ cell, turn, handleCardClick, role, winner }) {
     const colorDict = new Map([
         ["red", "#ff948c"],
@@ -35,7 +37,7 @@ function WordCell({ cell, turn, handleCardClick, role, winner }) {
                 return (
                     <div
                         className="cell"
-                        style={{ backgroundColor: colorDict.get(cell.type) }}>
+                        style={{ backgroundColor: colorDict.get(cell.color) }}>
                         <p>{cell.word}</p>
                     </div>
                 );
@@ -51,7 +53,7 @@ function WordCell({ cell, turn, handleCardClick, role, winner }) {
                 return (
                     <div
                         className="cell"
-                        style={{ backgroundColor: colorDict.get(cell.type) }}>
+                        style={{ backgroundColor: colorDict.get(cell.color) }}>
                         <p>{cell.word}</p>
                     </div>
                 );
@@ -63,7 +65,7 @@ function WordCell({ cell, turn, handleCardClick, role, winner }) {
             return (
                 <div
                     className="cell"
-                    style={{ backgroundColor: colorDict.get(cell.type) }}>
+                    style={{ backgroundColor: colorDict.get(cell.color) }}>
                     <p>{cell.word}</p>
                 </div>
             );
@@ -71,7 +73,9 @@ function WordCell({ cell, turn, handleCardClick, role, winner }) {
             return (
                 <div
                     className="cell"
-                    style={{ backgroundColor: colorDictDarker.get(cell.type) }}>
+                    style={{
+                        backgroundColor: colorDictDarker.get(cell.color),
+                    }}>
                     <p>{cell.word}</p>
                 </div>
             );
